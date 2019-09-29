@@ -362,7 +362,7 @@
 <p>然后找到blog文件夹下名为_config.yml的配置文件，将里面的theme改为next<br><img src="/images/hexo/configtheme.png" alt><br>然后输入如下命令，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
 
-<p>可以看到博客页面变为如下的样式，另外还可以对样式进行定制，这就需要修改next文件夹下的_config.yml文件，具体设置方式可以参考next主题的github网站<br><img src="/images/hexo/local-next.png" alt></p>
+<p>可以看到博客页面变为如下的样式，另外还可以对样式进行定制，这就需要修改next文件夹下的_config.yml文件，具体设置方式可以参考next主题的网站 <a href="https://theme-next.iissnan.com/" target="_blank" rel="noopener">https://theme-next.iissnan.com/</a><br><img src="/images/hexo/local-next.png" alt></p>
 <h3 id="将本地博客文件上传到github并配置github-pages"><a href="#将本地博客文件上传到github并配置github-pages" class="headerlink" title="将本地博客文件上传到github并配置github pages"></a>将本地博客文件上传到github并配置github pages</h3><p>首先需要在github上新建一个仓库，仓库的名称的格式为： 用户名.github.io，另外记得将最后一项勾选上<br><img src="/images/hexo/newrepo.png" alt><br>然后需要把本地blog文件夹的内容上传到github，打开之前blog文件夹下的_config.yml配置文件，把文件中的最后几行改成<br>如下的内容：<br><img src="/images/hexo/config-repo.png" alt><br>然后运行如下的命令装一个hexo部署到git的工具插件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
 

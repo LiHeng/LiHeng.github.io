@@ -94,7 +94,7 @@
 <meta property="og:image" content="http://yoursite.com/images/hexo/newrepo.png">
 <meta property="og:image" content="http://yoursite.com/images/hexo/config-repo.png">
 <meta property="og:image" content="http://yoursite.com/images/hexo/repo-files.png">
-<meta property="og:updated_time" content="2019-09-29T02:38:12.472Z">
+<meta property="og:updated_time" content="2019-09-29T02:49:01.328Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="mac 利用hexo搭建自己的博客网站">
 <meta name="twitter:description" content="环境准备hexo 是依赖于nodejs环境的，所以首先需要安装nodejs，然后后面需要将博客上传到github，所以我们要安装git，相信大家对这两个软件的安装过程都非常熟悉了（直接到对应的官网上下载.dmg安装包，然后一路next的傻瓜式安装方式）。 安装hexo在终端输入  1$ sudo npm install -g hexo-cli  在安装途中可能会出现如下的错误这是因为在安装hexo">
@@ -370,7 +370,7 @@
 <p>然后找到blog文件夹下名为_config.yml的配置文件，将里面的theme改为next<br><img src="/images/hexo/configtheme.png" alt><br>然后输入如下命令，</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
 
-<p>可以看到博客页面变为如下的样式，另外还可以对样式进行定制，这就需要修改next文件夹下的_config.yml文件，具体设置方式可以参考next主题的github网站<br><img src="/images/hexo/local-next.png" alt></p>
+<p>可以看到博客页面变为如下的样式，另外还可以对样式进行定制，这就需要修改next文件夹下的_config.yml文件，具体设置方式可以参考next主题的网站 <a href="https://theme-next.iissnan.com/" target="_blank" rel="noopener">https://theme-next.iissnan.com/</a><br><img src="/images/hexo/local-next.png" alt></p>
 <h3 id="将本地博客文件上传到github并配置github-pages"><a href="#将本地博客文件上传到github并配置github-pages" class="headerlink" title="将本地博客文件上传到github并配置github pages"></a>将本地博客文件上传到github并配置github pages</h3><p>首先需要在github上新建一个仓库，仓库的名称的格式为： 用户名.github.io，另外记得将最后一项勾选上<br><img src="/images/hexo/newrepo.png" alt><br>然后需要把本地blog文件夹的内容上传到github，打开之前blog文件夹下的_config.yml配置文件，把文件中的最后几行改成<br>如下的内容：<br><img src="/images/hexo/config-repo.png" alt><br>然后运行如下的命令装一个hexo部署到git的工具插件</p>
 <figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
 
