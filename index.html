@@ -252,7 +252,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/28/mac-利用hexo搭建自己的博客网站/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/29/java11新特性/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="masterliheng">
@@ -271,7 +271,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/09/28/mac-利用hexo搭建自己的博客网站/" itemprop="url">mac 利用hexo搭建自己的博客网站</a></h1>
+                <a class="post-title-link" href="/2019/09/29/java11新特性/" itemprop="url">java11新特性</a></h1>
         
 
         <div class="post-meta">
@@ -283,8 +283,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-28T21:51:02+08:00">
-                2019-09-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-29T11:48:39+08:00">
+                2019-09-29
               </time>
             
 
@@ -306,8 +306,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/软件安装/" itemprop="url" rel="index">
-                    <span itemprop="name">软件安装</span>
+                  <a href="/categories/core-java/" itemprop="url" rel="index">
+                    <span itemprop="name">core java</span>
                   </a>
                 </span>
 
@@ -345,45 +345,7 @@
       
         
           
-            <h3 id="环境准备">环境准备</h3>
-<p>hexo 是依赖于nodejs环境的，所以首先需要安装nodejs，然后后面需要将博客上传到github，所以我们要安装git，相信大家对这两个软件的安装过程都非常熟悉了（直接到对应的官网上下载.dmg安装包，然后一路next的傻瓜式安装方式）😘 😎。</p>
-<h3 id="安装hexo">安装hexo</h3>
-<p>在终端输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<p>在安装途中可能会出现如下的错误<br>
-<img src="/images/hexo/error.png" alt><br>
-这是因为在安装hexo-cli的时候不能使用sudo，而是需要执行下面两条命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chown -R `whoami` /usr/<span class="built_in">local</span>/lib/node_modules</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<p>这样hexo环境就顺利安装成功了，然后输入命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ hexo i blog // 建立一个名为blog的项目名，用与存放blog文件</span><br><span class="line">$ <span class="built_in">cd</span> blog</span><br><span class="line">$ hexo g // 本地编译</span><br><span class="line">$ hexo s // 本地预览</span><br></pre></td></tr></table></figure>
-<p>然后打开浏览器，输入网址 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>，这样就可以在本地预览自己的博客网站了，是不是有点小激动呢！<br>
-<img src="/images/hexo/local.png" alt></p>
-<h3 id="切换hexo博客主题">切换hexo博客主题</h3>
-<p>博客网页上默认的主题为loadscape的主题，不同主题有不同的功能布局外观，主题也可以自己写，但是本人用的是网上的主题，这里放上一些主题：<br>
-<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="noopener">https://github.com/hexojs/hexo/wiki/Themes</a></p>
-<p>next是比较流行的一个hexo主题，本人也是使用的改主题，输入如下命令来获取next主题（当前所在目录为blog）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-<p>然后找到blog文件夹下名为_config.yml的配置文件，将里面的theme改为next<br>
-<img src="/images/hexo/configtheme.png" alt><br>
-然后输入如下命令，</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
-<p>可以看到博客页面变为如下的样式，另外还可以对样式进行定制，这就需要修改next文件夹下的_config.yml文件，具体设置方式可以参考next主题的网站 <a href="https://theme-next.iissnan.com/" target="_blank" rel="noopener">https://theme-next.iissnan.com/</a><br>
-<img src="/images/hexo/local-next.png" alt></p>
-<h3 id="将本地博客文件上传到github并配置github-pages">将本地博客文件上传到github并配置github pages</h3>
-<p>首先需要在github上新建一个仓库，仓库的名称的格式为： <a href="http://xn--eqr924avxo.github.io" target="_blank" rel="noopener">用户名.github.io</a>，另外记得将最后一项勾选上<br>
-<img src="/images/hexo/newrepo.png" alt><br>
-然后需要把本地blog文件夹的内容上传到github，打开之前blog文件夹下的_config.yml配置文件，把文件中的最后几行改成<br>
-如下的内容：<br>
-<img src="/images/hexo/config-repo.png" alt><br>
-然后运行如下的命令装一个hexo部署到git的工具插件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-<p>然后输入如下命令，将blog本地文件上传到github</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
-<p>最后在github新建的仓库里面就多了如下的文件：<br>
-<img src="/images/hexo/repo-files.png" alt></p>
-<p>在浏览器里面输入https://liheng.github.io 就可以访问自己的博客了 😋 ！！！！</p>
-
+            
           
         
       
@@ -422,7 +384,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><a class="page-number" href="/page/3/">3</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -468,7 +430,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">3</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -479,7 +441,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">1</span>
+                  <span class="site-state-item-count">2</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -490,7 +452,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">2</span>
+                  <span class="site-state-item-count">4</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
