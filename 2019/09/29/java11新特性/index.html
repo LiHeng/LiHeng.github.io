@@ -79,18 +79,18 @@
 
 
 
-<meta name="description" content="一个菜鸡的学习之路">
+<meta name="description" content="前言 Java 11 已于 2018 年 9 月 25 日正式发布，为了加快的版本迭代、跟进社区反馈，Java 的版本发布周期调整为每六个月一次——即每半年发布一个大版本，每个季度发布一个中间特性版本，并且做出不会跳票的承诺。通过这样的方式，Java 开发团队能够将一些重要特性尽早的合并到 Java Release 版本中，以便快速得到开发者的反馈，避免出现类似 Java 9 发布时的两次延期的情">
 <meta name="keywords" content="java,java11">
 <meta property="og:type" content="article">
-<meta property="og:title" content="java11新特性">
+<meta property="og:title" content="java 11 新特性">
 <meta property="og:url" content="http://yoursite.com/2019/09/29/java11新特性/index.html">
 <meta property="og:site_name" content="masterliheng的博客">
-<meta property="og:description" content="一个菜鸡的学习之路">
+<meta property="og:description" content="前言 Java 11 已于 2018 年 9 月 25 日正式发布，为了加快的版本迭代、跟进社区反馈，Java 的版本发布周期调整为每六个月一次——即每半年发布一个大版本，每个季度发布一个中间特性版本，并且做出不会跳票的承诺。通过这样的方式，Java 开发团队能够将一些重要特性尽早的合并到 Java Release 版本中，以便快速得到开发者的反馈，避免出现类似 Java 9 发布时的两次延期的情">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-09-29T03:49:31.127Z">
+<meta property="og:updated_time" content="2019-09-30T02:52:47.866Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="java11新特性">
-<meta name="twitter:description" content="一个菜鸡的学习之路">
+<meta name="twitter:title" content="java 11 新特性">
+<meta name="twitter:description" content="前言 Java 11 已于 2018 年 9 月 25 日正式发布，为了加快的版本迭代、跟进社区反馈，Java 的版本发布周期调整为每六个月一次——即每半年发布一个大版本，每个季度发布一个中间特性版本，并且做出不会跳票的承诺。通过这样的方式，Java 开发团队能够将一些重要特性尽早的合并到 Java Release 版本中，以便快速得到开发者的反馈，避免出现类似 Java 9 发布时的两次延期的情">
 
 
 
@@ -126,7 +126,7 @@
 
 
 
-  <title>java11新特性 | masterliheng的博客</title>
+  <title>java 11 新特性 | masterliheng的博客</title>
   
 
 
@@ -270,7 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">java11新特性</h1>
+          <h1 class="post-title" itemprop="name headline">java 11 新特性</h1>
         
 
         <div class="post-meta">
@@ -342,7 +342,69 @@
       
 
       
-        
+        <h3 id="前言">前言</h3>
+<p>Java 11 已于 2018 年 9 月 25 日正式发布，为了加快的版本迭代、跟进社区反馈，Java 的版本发布周期调整为每六个月一次——即每半年发布一个大版本，每个季度发布一个中间特性版本，并且做出不会跳票的承诺。通过这样的方式，Java 开发团队能够将一些重要特性尽早的合并到 Java Release 版本中，以便快速得到开发者的反馈，避免出现类似 Java 9 发布时的两次延期的情况。</p>
+<p>按照官方介绍，新的版本发布周期将会严格按照时间节点，于每年的 3 月和 9 月发布，Java 11 发布的时间节点也正好处于 Java 8 免费更新到期的前夕。与 Java 9 和 Java 10 这两个被称为&quot;功能性的版本&quot;不同，Java 11 仅将提供长期支持服务（LTS, Long-Term-Support），还将作为 Java 平台的默认支持版本，并且会提供技术支持直至 2023 年 9 月，对应的补丁和安全警告等支持将持续至 2026 年。</p>
+<p>本文主要针对 Java 11 中的新特性展开介绍，快速了解 Java 11 带来的变化。</p>
+<h3 id="基于嵌套的访问控制">基于嵌套的访问控制</h3>
+<p>嵌套访问控制是一种控制上下文访问的策略，允许逻辑上属于同一代码实体，但被编译之后分为多个分散的 class 文件的类，无需编译器额外的创建可扩展的桥接访问方法，即可访问彼此的私有成员，并且这种改进是在 Java 字节码级别的。</p>
+<p>在 Java 11 之前的版本中，编译之后的 class 文件中通过 InnerClasses 和 Enclosing Method 两种属性来帮助编译器确认源码的嵌套关系，每一个嵌套的类会编译到自己所在的 class 文件中，不同类的文件通过上面介绍的两种属性的来相互连接。这两种属性对于编译器确定相互之间的嵌套关系已经足够了，但是并不适用于访问控制。</p>
+<p>Java 11 中引入了两个新的属性：一个叫做 NestMembers 的属性，用于标识其它已知的静态 nest 成员；另外一个是每个 nest 成员都包含的 NestHost 属性，用于标识出它的 nest 宿主类。</p>
+<h3 id="标准-http-client-升级">标准 HTTP Client 升级</h3>
+<p>在Java 9 中开始引入了一个用于处理HTTP请求的HTTP Client API, 该 API 支持同步和异步，而在 Java 11 中已经为正式可用状态，可以在 <a href="http://java.net" target="_blank" rel="noopener">java.net</a> 包中找到这个 API，看一下这个API的用法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">String uri = <span class="string">"http://www.oracle.com/"</span>;</span><br><span class="line"><span class="keyword">var</span> client = HttpClient.newHttpClient();</span><br><span class="line"><span class="keyword">var</span> request = HttpRequest.newBuilder()</span><br><span class="line">        .uri(URI.create(uri))</span><br><span class="line">        .GET()</span><br><span class="line">        .build();</span><br><span class="line"><span class="keyword">var</span> response = client.send(request, HttpResponse.BodyHandlers.ofString());  <span class="comment">// 同步请求</span></span><br><span class="line">System.out.println(response.body());</span><br><span class="line"></span><br><span class="line">client.sendAsync(request, HttpResponse.BodyHandlers.ofString())</span><br><span class="line">                .thenApply(HttpResponse::body)</span><br><span class="line">                .thenAccept(System.out::println);  <span class="comment">// 异步请求</span></span><br></pre></td></tr></table></figure>
+<p>Http请求的默认方式为GET。我们终于可以摆脱老旧的HttpURLConnection了😄，但是是否可以真正地取代Apache的HttpClient工具包还待进一步验证。</p>
+<h3 id="字符串api加强">字符串API加强</h3>
+<p>Java 11 对原来的字符串API进行了增强，下面的代码演示了其中部分增强的API用法：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">String s = <span class="string">"Javastack "</span>;</span><br><span class="line">s = s.strip();   <span class="comment">// 去除字符串首位的空格</span></span><br><span class="line">s = s.repeat(<span class="number">3</span>); <span class="comment">// 字符串重复拼接</span></span><br><span class="line"><span class="keyword">int</span> c = s.lines().count(); <span class="comment">// 计算字符串中包含的行数（以换行符分隔）</span></span><br></pre></td></tr></table></figure>
+<h3 id="java-启动器增强">Java 启动器增强</h3>
+<p>在之前的版本，我们运行一个Java主类需要两步，即先编译然后再执行。而在Java 11 中，通过一个Java命令就可以搞定了:</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ java Main.java</span><br></pre></td></tr></table></figure>
+<h3 id="用于-lambda-参数的局部变量语法">用于 Lambda 参数的局部变量语法</h3>
+<p>本地变量类型var是java 10提出的新概念，它可以从上下文中推断出本地变量的类型，从而提高代码可读性。</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        URL url = <span class="keyword">new</span> URL(<span class="string">"http://www.oracle.com/"</span>);</span><br><span class="line">        URLConnection conn = url.openConnection();</span><br><span class="line">        Reader reader = <span class="keyword">new</span> BufferedReader(</span><br><span class="line">                <span class="keyword">new</span> InputStreamReader(conn.getInputStream()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>使用var声明后，代码的写法可以变成如下的形式：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">Main</span> </span>&#123;</span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">        <span class="keyword">var</span> url = <span class="keyword">new</span> URL(<span class="string">"http://www.oracle.com/"</span>);</span><br><span class="line">        <span class="keyword">var</span> conn = url.openConnection();</span><br><span class="line">        <span class="keyword">var</span> reader = <span class="keyword">new</span> BufferedReader(</span><br><span class="line">                <span class="keyword">new</span> InputStreamReader(conn.getInputStream()));</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<p>在上面的代码中，我们使用var代替了URL、URLConnection、Reader，提高了代码的可读性，也方便了开发。 但是在Java 10中，var变量不能在lambda表达式中声明，在Java 11中，解决了这个问题。现在，我们可以在lambda表达式中使用var，例如：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">Map&lt;String, Object&gt; map </span><br><span class="line">    = <span class="keyword">new</span> TreeMap&lt;String, Object&gt;((<span class="keyword">var</span> a, <span class="keyword">var</span> b) -&gt; a.compareTo(b));</span><br></pre></td></tr></table></figure>
+<h3 id="zgc">ZGC</h3>
+<p>ZGC 即 Z Garbage Collector（垃圾收集器或垃圾回收器），这应该是 Java 11 中最为瞩目的特性，没有之一。ZGC 是一个可伸缩的、低延迟的垃圾收集器，主要为了满足如下目标进行设计：</p>
+<ul>
+<li>GC 停顿时间不超过 10ms</li>
+<li>即能处理几百 MB 的小堆，也能处理几个 TB 的大堆</li>
+<li>应用吞吐能力不会下降超过 15%（与 G1 回收算法相比）</li>
+<li>方便在此基础上引入新的 GC 特性和利用 colord</li>
+<li>为 Load barriers 优化奠定基础</li>
+</ul>
+<p>不过目前 ZGC 还处于实验阶段，目前只在 Linux/x64 上可用，如果有足够的需求，将来可能会增加对其他平台的支持。</p>
+<p>作为实验性功能的 ZGC 将不会出现在 JDK 构建中，除非在编译时使用 configure 参数：–with-jvm-features=zgc 显式启用。编译完成之后，需要配置以下 JVM 参数，才能使用 ZGC，具体启动 ZGC 参数如下：</p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">-XX：+ UnlockExperimentalVMOptions -XX：+ UseZGC -Xmx10g</span><br></pre></td></tr></table></figure>
+<p>ZGC 是一个并发收集器，必须要设置一个最大堆的大小，应用需要多大的堆，主要有下面几个考量:</p>
+<ul>
+<li>对象的分配速率，要保证在 GC 的时候，堆中有足够的内存分配新对象。</li>
+<li>一般来说，给 ZGC 的内存越多越好，但是也不能浪费内存，所以要找到一个平衡。</li>
+</ul>
+<h3 id="所有的java-11-新特性参考链接">所有的Java 11 新特性参考链接</h3>
+<ul>
+<li><a href="http://openjdk.java.net/jeps/181" target="_blank" rel="noopener">181: Nest-Based Access Control</a></li>
+<li><a href="http://openjdk.java.net/jeps/309" target="_blank" rel="noopener">309: Dynamic Class-File Constants</a></li>
+<li><a href="http://openjdk.java.net/jeps/315" target="_blank" rel="noopener">315: Improve Aarch64 Intrinsics</a></li>
+<li><a href="http://openjdk.java.net/jeps/318" target="_blank" rel="noopener">318: Epsilon: A No-Op Garbage Collector</a></li>
+<li><a href="http://openjdk.java.net/jeps/320" target="_blank" rel="noopener">320: Remove the Java EE and CORBA Modules</a></li>
+<li><a href="http://openjdk.java.net/jeps/321" target="_blank" rel="noopener">321: HTTP Client (Standard)</a></li>
+<li><a href="http://openjdk.java.net/jeps/323" target="_blank" rel="noopener">323: Local-Variable Syntax for Lambda Parameters</a></li>
+<li><a href="http://openjdk.java.net/jeps/324" target="_blank" rel="noopener">324: Key Agreement with Curve25519 and Curve448</a></li>
+<li><a href="http://openjdk.java.net/jeps/327" target="_blank" rel="noopener">327: Unicode 10</a></li>
+<li><a href="http://openjdk.java.net/jeps/328" target="_blank" rel="noopener">328: Flight Recorder</a></li>
+<li><a href="http://openjdk.java.net/jeps/329" target="_blank" rel="noopener">329: ChaCha20 and Poly1305 Cryptographic Algorithms</a></li>
+<li><a href="http://openjdk.java.net/jeps/330" target="_blank" rel="noopener">330: Launch Single-File Source-Code Programs</a></li>
+<li><a href="http://openjdk.java.net/jeps/331" target="_blank" rel="noopener">331: Low-Overhead Heap Profiling</a></li>
+<li><a href="http://openjdk.java.net/jeps/332" target="_blank" rel="noopener">332: Transport Layer Security (TLS) 1.3</a></li>
+<li><a href="http://openjdk.java.net/jeps/333" target="_blank" rel="noopener">333: ZGC: A Scalable Low-Latency Garbage Collector(Experimental)</a></li>
+<li><a href="http://openjdk.java.net/jeps/335" target="_blank" rel="noopener">335: Deprecate the Nashorn JavaScript Engine</a></li>
+<li><a href="http://openjdk.java.net/jeps/336" target="_blank" rel="noopener">336: Deprecate the Pack200 Tools and API</a></li>
+</ul>
+
       
     </div>
     
@@ -434,8 +496,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -513,6 +584,22 @@
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基于嵌套的访问控制"><span class="nav-number">2.</span> <span class="nav-text">基于嵌套的访问控制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#标准-http-client-升级"><span class="nav-number">3.</span> <span class="nav-text">标准 HTTP Client 升级</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#字符串api加强"><span class="nav-number">4.</span> <span class="nav-text">字符串API加强</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#java-启动器增强"><span class="nav-number">5.</span> <span class="nav-text">Java 启动器增强</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#用于-lambda-参数的局部变量语法"><span class="nav-number">6.</span> <span class="nav-text">用于 Lambda 参数的局部变量语法</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#zgc"><span class="nav-number">7.</span> <span class="nav-text">ZGC</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#所有的java-11-新特性参考链接"><span class="nav-number">8.</span> <span class="nav-text">所有的Java 11 新特性参考链接</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
