@@ -590,7 +590,7 @@
         }
     }
 </pre>
-<h3 id="可以添加自定义方法">可以添加自定义方法</h3>
+<h3 id="添加自定义方法">添加自定义方法</h3>
 <pre>
     // 形式如下 
     default PersonDTO personToPersonDTO(Person person) {
@@ -633,7 +633,7 @@
     PersonConverter.INSTANCE.update(person, personDTO);
     assertEquals("xiaozhi", personDTO.getName());
 </pre>
-<h4 id="spring-注入的方式">Spring 注入的方式</h4>
+<h3 id="spring-注入的方式">Spring 注入的方式</h3>
 <pre>
     // 刚才一直写的例子是默认的方式
     PersonConverter INSTANCE = Mappers.getMapper(PersonConverter.class);
@@ -684,7 +684,7 @@
     public class BaseTestConfiguration {
     }
 </pre>
-<h4 id="mapstruct-注解的关键词">MapStruct 注解的关键词</h4>
+<h3 id="mapstruct-注解的关键词">MapStruct 注解的关键词</h3>
 <pre>
     @Mapper 只有在接口加上这个注解， MapStruct 才会去实现该接口
         @Mapper 里有个 componentModel 属性，主要是指定实现类的类型，一般用到两个
