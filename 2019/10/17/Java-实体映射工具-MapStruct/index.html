@@ -87,7 +87,7 @@
 <meta property="og:site_name" content="masterliheng的博客">
 <meta property="og:description" content="在一个成熟的工程中，尤其是现在的分布式系统中，应用与应用之间，还有单独的应用细分模块之后，DO 一般不会让外部依赖，这时候需要在提供对外接口的模块里放 DTO 用于对象传输，也即是 DO 对象对内，DTO对象对外，DTO 可以根据业务需要变更，并不需要映射 DO 的全部属性。 这种 对象与对象之间的互相转换，就需要有一个专门用来解决转换问题的工具，毕竟每一个字段都 get/set 会很麻烦。 Ma">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2019-10-17T02:59:24.337Z">
+<meta property="og:updated_time" content="2019-10-17T03:08:43.725Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="Java 实体映射工具 MapStruct">
 <meta name="twitter:description" content="在一个成熟的工程中，尤其是现在的分布式系统中，应用与应用之间，还有单独的应用细分模块之后，DO 一般不会让外部依赖，这时候需要在提供对外接口的模块里放 DTO 用于对象传输，也即是 DO 对象对内，DTO对象对外，DTO 可以根据业务需要变更，并不需要映射 DO 的全部属性。 这种 对象与对象之间的互相转换，就需要有一个专门用来解决转换问题的工具，毕竟每一个字段都 get/set 会很麻烦。 Ma">
@@ -422,8 +422,7 @@
     }
 </pre>
 <p>写一个 Mapper 接口 PersonConverter，其中两个方法，一个是单实体映射，另一个是List映射</p>
-<pre><code>若源对象属性与目标对象属性名字一致，会自动映射对应属性，不一样的需要指定，也可以用 format 转成自己想要的类型，也支持表达式的方式，可以看到像 id、name、email这些名词一致的我并没有指定 source-target，而birthday-birth指定了，转换格式的 birthDateFormat 加了dateFormat 或者 birthExpressionFormat 加了 expression，如果某个属性你不想映射，可以加个 ignore=true
-</code></pre>
+<p>若源对象属性与目标对象属性名字一致，会自动映射对应属性，不一样的需要指定，也可以用 format 转成自己想要的类型，也支持表达式的方式，可以看到像 id、name、email这些名词一致的我并没有指定 source-target，而birthday-birth指定了，转换格式的 birthDateFormat 加了dateFormat 或者 birthExpressionFormat 加了 expression，如果某个属性你不想映射，可以加个 ignore=true</p>
 <pre>
     @Mapper
     public interface PersonConverter {
@@ -530,176 +529,183 @@
 <p>MapStruct 可以将几种类型的对象映射为另外一种类型，比如将多个 DO 对象转换为 DTO</p>
 <p>例子</p>
 <ul>
-<li>
-<p>两个 DO 对象 Item 和 Sku，一个 DTO 对象 SkuDTO<br>
-<pre>@NoArgsConstructor<br>
-@AllArgsConstructor<br>
-@Data<br>
-public class Item {<br>
-private Long id;<br>
-private String title;<br>
-}</pre></p>
-<p>@NoArgsConstructor<br>
-@AllArgsConstructor<br>
-@Data<br>
-public class Sku {<br>
-private Long id;<br>
-private String code;<br>
-private Integer price;<br>
-}</p>
-<p>@NoArgsConstructor<br>
-@AllArgsConstructor<br>
-@Data<br>
-public class SkuDTO {<br>
-private Long skuId;<br>
-private String skuCode;<br>
-private Integer skuPrice;<br>
-private Long itemId;<br>
-private String itemName;<br>
-}</p>
-
-</li>
-<li>
-<p>创建 ItemConverter（映射）接口，MapStruct 就会自动实现该接口<br>
-<pre>@Mapper<br>
-public interface ItemConverter {<br>
-ItemConverter INSTANCE = Mappers.getMapper(ItemConverter.class);</pre></p>
-<pre><code>@Mappings({
-        @Mapping(source = &quot;sku.id&quot;,target = &quot;skuId&quot;),
-        @Mapping(source = &quot;sku.code&quot;,target = &quot;skuCode&quot;),
-        @Mapping(source = &quot;sku.price&quot;,target = &quot;skuPrice&quot;),
-        @Mapping(source = &quot;item.id&quot;,target = &quot;itemId&quot;),
-        @Mapping(source = &quot;item.title&quot;,target = &quot;itemName&quot;)
-})
-SkuDTO domain2dto(Item item, Sku sku);
-</code></pre>
-<p>}</p>
-
-</li>
-<li>
-<p>创建测试类，讲 Item 和 Sku 两个 DO对象，映射成一个 DTO 对象 SkuDTO<br>
-<pre>public class ItemConverterTest {<br>
-@Test<br>
-public void test() {<br>
-Item item = new Item(1L, “iPhone X”);<br>
-Sku sku = new Sku(2L, “phone12345”, 1000000);<br>
-SkuDTO skuDTO = ItemConverter.INSTANCE.domain2dto(item, sku);<br>
-assertNotNull(skuDTO);<br>
-assertEquals(skuDTO.getSkuId(),sku.getId());<br>
-assertEquals(skuDTO.getSkuCode(),sku.getCode());<br>
-assertEquals(skuDTO.getSkuPrice(),sku.getPrice());<br>
-assertEquals(skuDTO.getItemId(),item.getId());<br>
-assertEquals(skuDTO.getItemName(),item.getTitle());<br>
-}<br>
-}</pre></p>
-
-<h3 id="可以添加自定义方法">可以添加自定义方法</h3>
-<pre><code>&lt;pre&gt;// 形式如下 
-</code></pre>
-<p>default PersonDTO personToPersonDTO(Person person) {<br>
-//hand-written mapping logic<br>
-}</p>
-<p>// 比如在 PersonConverter 里面加入如下<br>
-default Boolean convert2Bool(Integer value) {<br>
-if (value == null || value &lt; 1) {<br>
-return Boolean.FALSE;<br>
-} else {<br>
-return Boolean.TRUE;<br>
-}<br>
-}</p>
-<p>default Integer convert2Int(Boolean value) {<br>
-if (value == null) {<br>
-return null;<br>
-}<br>
-if (Boolean.TRUE.equals(value)) {<br>
-return 1;<br>
-}<br>
-return 0;<br>
-}<br>
-// 测试类 PersonConverterTest 加入<br>
-assertTrue(PersonConverter.INSTANCE.convert2Bool(1));<br>
-assertEquals((int)PersonConverter.INSTANCE.convert2Int(true),1);</p>
-
-<h4 id="如果已经有了接收对象-更新目标对象">如果已经有了接收对象，更新目标对象</h4>
-<pre><code>&lt;pre&gt;`// 比如在 PersonConverter 里面加入如下，@InheritConfiguration 用于继承刚才的配置
-</code></pre>
-<p>@InheritConfiguration(name = “domain2dto”)<br>
-void update(Person person, @MappingTarget PersonDTO personDTO);</p>
-<p>// 测试类 PersonConverterTest 加入如下<br>
-Person person = new Person(<a href="mailto:1L,%22zhige%22,%22zhige.me@gmail.com" target="_blank" rel="noopener">1L,“zhige”,&quot;zhige.me@gmail.com</a>&quot;,new Date(),new User(1));<br>
-PersonDTO personDTO = PersonConverter.INSTANCE.domain2dto(person);<br>
-assertEquals(“zhige”, personDTO.getName());<br>
-person.setName(“xiaozhi”);<br>
-PersonConverter.INSTANCE.update(person, personDTO);<br>
-assertEquals(“xiaozhi”, personDTO.getName());<br>
-`</p>
-<h4 id="spring-注入的方式">Spring 注入的方式</h4>
-<pre><code>&lt;pre&gt;`// 刚才一直写的例子是默认的方式
-</code></pre>
-<p>PersonConverter INSTANCE = Mappers.getMapper(PersonConverter.class);<br>
-`</p>
-<p>还有一种常用的方式，是和常用的框架 Spring 结合，在 @Mapper 后面加入 <code>componentModel=&quot;spring&quot;</code></p>
-<pre><code>&lt;pre&gt;`@Mapper(componentModel=&quot;spring&quot;)
-</code></pre>
-<p>public interface PersonConverter {<br>
-@Mappings({<br>
-@Mapping(source = “birthday”, target = “birth”),<br>
-@Mapping(source = “birthday”, target = “birthDateFormat”, dateFormat = “yyyy-MM-dd HH:mm:ss”),<br>
-@Mapping(target = “birthExpressionFormat”, expression = “java(org.apache.commons.lang3.time.DateFormatUtils.format(person.getBirthday(),“yyyy-MM-dd HH:mm:ss”))”),<br>
-@Mapping(source = “user.age”, target = “age”),<br>
-@Mapping(target = “email”, ignore = true)<br>
-})<br>
-PersonDTO domain2dto(Person person);<br>
-}<br>
-`</p>
-<p>这时候测试类改一下，我用的 spring boot 的形式</p>
-<pre><code>&lt;pre&gt;`@RunWith(SpringRunner.class)
-</code></pre>
-<p>@SpringBootTest(classes = BaseTestConfiguration.class)<br>
-public class PersonConverterTest {<br>
-//这里把转换器装配进来<br>
-@Autowired<br>
-private PersonConverter personConverter;<br>
-@Test<br>
-public void test() {<br>
-Person person = new Person(<a href="mailto:1L,%22zhige%22,%22zhige.me@gmail.com" target="_blank" rel="noopener">1L,“zhige”,&quot;zhige.me@gmail.com</a>&quot;,new Date(),new User(1));<br>
-PersonDTO personDTO = personConverter.domain2dto(person);</p>
-<pre><code>    assertNotNull(personDTO);
-    assertEquals(personDTO.getId(), person.getId());
-    assertEquals(personDTO.getName(), person.getName());
-    assertEquals(personDTO.getBirth(), person.getBirthday());
-    String format = DateFormatUtils.format(personDTO.getBirth(), &quot;yyyy-MM-dd HH:mm:ss&quot;);
-    assertEquals(personDTO.getBirthDateFormat(),format);
-    assertEquals(personDTO.getBirthExpressionFormat(),format);
-
-}
-</code></pre>
-<p>}<br>
-`</p>
-<p>我 test 路径下加入了一个配置类</p>
-<pre><code>&lt;pre&gt;`@EnableAutoConfiguration
-</code></pre>
-<p>@Configuration<br>
-@ComponentScan<br>
-public class BaseTestConfiguration {<br>
-}<br>
-`</p>
-<h4 id="mapstruct-注解的关键词">MapStruct 注解的关键词</h4>
-<pre><code>&lt;pre&gt;`@Mapper 只有在接口加上这个注解， MapStruct 才会去实现该接口
-@Mapper 里有个 componentModel 属性，主要是指定实现类的类型，一般用到两个
-default：默认，可以通过 Mappers.getMapper(Class) 方式获取实例对象
-spring：在接口的实现类上自动添加注解 @Component，可通过 @Autowired 方式注入
-</code></pre>
-<p>@Mapping：属性映射，若源对象属性与目标对象名字一致，会自动映射对应属性<br>
-source：源属性<br>
-target：目标属性<br>
-dateFormat：String 到 Date 日期之间相互转换，通过 SimpleDateFormat，该值为 SimpleDateFormat              的日期格式<br>
-ignore: 忽略这个字段<br>
-@Mappings：配置多个@Mapping<br>
-@MappingTarget 用于更新已有对象<br>
-@InheritConfiguration 用于继承配置</p>
-</li>
+<li>两个 DO 对象 Item 和 Sku，一个 DTO 对象 SkuDTO</li>
 </ul>
+<pre>
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public class Item {
+        private Long id;
+        private String title;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public class Sku {
+        private Long id;
+        private String code;
+        private Integer price;
+    }
+
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Data
+    public class SkuDTO {
+        private Long skuId;
+        private String skuCode;
+        private Integer skuPrice;
+        private Long itemId;
+        private String itemName;
+    }
+</pre>
+<ul>
+<li>创建 ItemConverter（映射）接口，MapStruct 就会自动实现该接口</li>
+</ul>
+<pre>
+    @Mapper
+    public interface ItemConverter {
+        ItemConverter INSTANCE = Mappers.getMapper(ItemConverter.class);
+
+        @Mappings({
+                @Mapping(source = "sku.id",target = "skuId"),
+                @Mapping(source = "sku.code",target = "skuCode"),
+                @Mapping(source = "sku.price",target = "skuPrice"),
+                @Mapping(source = "item.id",target = "itemId"),
+                @Mapping(source = "item.title",target = "itemName")
+        })
+        SkuDTO domain2dto(Item item, Sku sku);
+    }
+</pre>
+<ul>
+<li>创建测试类，讲 Item 和 Sku 两个 DO对象，映射成一个 DTO 对象 SkuDTO</li>
+</ul>
+<pre>
+    public class ItemConverterTest {
+        @Test
+        public void test() {
+            Item item = new Item(1L, "iPhone X");
+            Sku sku = new Sku(2L, "phone12345", 1000000);
+            SkuDTO skuDTO = ItemConverter.INSTANCE.domain2dto(item, sku);
+            assertNotNull(skuDTO);
+            assertEquals(skuDTO.getSkuId(),sku.getId());
+            assertEquals(skuDTO.getSkuCode(),sku.getCode());
+            assertEquals(skuDTO.getSkuPrice(),sku.getPrice());
+            assertEquals(skuDTO.getItemId(),item.getId());
+            assertEquals(skuDTO.getItemName(),item.getTitle());
+        }
+    }
+</pre>
+<h3 id="可以添加自定义方法">可以添加自定义方法</h3>
+<pre>
+    // 形式如下 
+    default PersonDTO personToPersonDTO(Person person) {
+        //hand-written mapping logic
+    }
+
+    // 比如在 PersonConverter 里面加入如下
+    default Boolean convert2Bool(Integer value) {
+        if (value == null || value &lt; 1) {
+            return Boolean.FALSE;
+        } else {
+            return Boolean.TRUE;
+        }
+    }
+
+    default Integer convert2Int(Boolean value) {
+        if (value == null) {
+            return null;
+        }
+        if (Boolean.TRUE.equals(value)) {
+            return 1;
+        }
+        return 0;
+    }
+    // 测试类 PersonConverterTest 加入
+    assertTrue(PersonConverter.INSTANCE.convert2Bool(1));
+    assertEquals((int)PersonConverter.INSTANCE.convert2Int(true),1);
+</pre>
+<h4 id="如果已经有了接收对象-更新目标对象">如果已经有了接收对象，更新目标对象</h4>
+<pre>
+    // 比如在 PersonConverter 里面加入如下，@InheritConfiguration 用于继承刚才的配置
+    @InheritConfiguration(name = "domain2dto")
+    void update(Person person, @MappingTarget PersonDTO personDTO);
+
+    // 测试类 PersonConverterTest 加入如下
+    Person person = new Person(1L,"zhige","zhige.me@gmail.com",new Date(),new User(1));
+    PersonDTO personDTO = PersonConverter.INSTANCE.domain2dto(person);
+    assertEquals("zhige", personDTO.getName());
+    person.setName("xiaozhi");
+    PersonConverter.INSTANCE.update(person, personDTO);
+    assertEquals("xiaozhi", personDTO.getName());
+</pre>
+<h4 id="spring-注入的方式">Spring 注入的方式</h4>
+<pre>
+    // 刚才一直写的例子是默认的方式
+    PersonConverter INSTANCE = Mappers.getMapper(PersonConverter.class);
+</pre>
+<p>还有一种常用的方式，是和常用的框架 Spring 结合，在 @Mapper 后面加入 <code>componentModel=&quot;spring&quot;</code></p>
+<pre>
+    @Mapper(componentModel="spring")
+    public interface PersonConverter {
+        @Mappings({
+            @Mapping(source = "birthday", target = "birth"),
+            @Mapping(source = "birthday", target = "birthDateFormat", dateFormat = "yyyy-MM-dd HH:mm:ss"),
+            @Mapping(target = "birthExpressionFormat", expression = "java(org.apache.commons.lang3.time.DateFormatUtils.format(person.getBirthday(),\"yyyy-MM-dd HH:mm:ss\"))"),
+            @Mapping(source = "user.age", target = "age"),
+            @Mapping(target = "email", ignore = true)
+        })
+        PersonDTO domain2dto(Person person);
+    }
+</pre>
+<p>这时候测试类改一下，我用的 spring boot 的形式</p>
+<pre>
+    @RunWith(SpringRunner.class)
+    @SpringBootTest(classes = BaseTestConfiguration.class)
+    public class PersonConverterTest {
+        //这里把转换器装配进来
+        @Autowired
+        private PersonConverter personConverter;
+        @Test
+        public void test() {
+            Person person = new Person(1L,"zhige","zhige.me@gmail.com",new Date(),new User(1));
+            PersonDTO personDTO = personConverter.domain2dto(person);
+
+            assertNotNull(personDTO);
+            assertEquals(personDTO.getId(), person.getId());
+            assertEquals(personDTO.getName(), person.getName());
+            assertEquals(personDTO.getBirth(), person.getBirthday());
+            String format = DateFormatUtils.format(personDTO.getBirth(), "yyyy-MM-dd HH:mm:ss");
+            assertEquals(personDTO.getBirthDateFormat(),format);
+            assertEquals(personDTO.getBirthExpressionFormat(),format);
+
+        }
+    }
+</pre>
+<p>我 test 路径下加入了一个配置类</p>
+<pre>
+    @EnableAutoConfiguration
+    @Configuration
+    @ComponentScan
+    public class BaseTestConfiguration {
+    }
+</pre>
+<h4 id="mapstruct-注解的关键词">MapStruct 注解的关键词</h4>
+<pre>
+    @Mapper 只有在接口加上这个注解， MapStruct 才会去实现该接口
+        @Mapper 里有个 componentModel 属性，主要是指定实现类的类型，一般用到两个
+        default：默认，可以通过 Mappers.getMapper(Class) 方式获取实例对象
+        spring：在接口的实现类上自动添加注解 @Component，可通过 @Autowired 方式注入
+    @Mapping：属性映射，若源对象属性与目标对象名字一致，会自动映射对应属性
+        source：源属性
+        target：目标属性
+        dateFormat：String 到 Date 日期之间相互转换，通过 SimpleDateFormat，该值为 SimpleDateFormat              的日期格式
+        ignore: 忽略这个字段
+    @Mappings：配置多个@Mapping
+    @MappingTarget 用于更新已有对象
+    @InheritConfiguration 用于继承配置
+</pre>
 <p>本文只是写了一些常用的比较简单的一些功能，更详细的可以去阅读官方文档： <a href="http://mapstruct.org/documentation/stable/reference/html/" target="_blank" rel="noopener">mapstruct.org/documentati…</a></p>
 
       
