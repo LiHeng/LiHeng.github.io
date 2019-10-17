@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="Hexo, NexT">
+  <meta name="keywords" content="Java-实体映射工具,MapStruct,">
 
 
 
@@ -79,16 +79,18 @@
 
 
 
-<meta name="description" content="一个菜鸡的学习之路">
-<meta property="og:type" content="website">
-<meta property="og:title" content="masterliheng的博客">
-<meta property="og:url" content="http://yoursite.com/index.html">
+<meta name="description" content="在一个成熟的工程中，尤其是现在的分布式系统中，应用与应用之间，还有单独的应用细分模块之后，DO 一般不会让外部依赖，这时候需要在提供对外接口的模块里放 DTO 用于对象传输，也即是 DO 对象对内，DTO对象对外，DTO 可以根据业务需要变更，并不需要映射 DO 的全部属性。 这种 对象与对象之间的互相转换，就需要有一个专门用来解决转换问题的工具，毕竟每一个字段都 get/set 会很麻烦。 Ma">
+<meta name="keywords" content="Java-实体映射工具,MapStruct">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Java 实体映射工具 MapStruct">
+<meta property="og:url" content="http://yoursite.com/2019/10/17/Java-实体映射工具-MapStruct/index.html">
 <meta property="og:site_name" content="masterliheng的博客">
-<meta property="og:description" content="一个菜鸡的学习之路">
+<meta property="og:description" content="在一个成熟的工程中，尤其是现在的分布式系统中，应用与应用之间，还有单独的应用细分模块之后，DO 一般不会让外部依赖，这时候需要在提供对外接口的模块里放 DTO 用于对象传输，也即是 DO 对象对内，DTO对象对外，DTO 可以根据业务需要变更，并不需要映射 DO 的全部属性。 这种 对象与对象之间的互相转换，就需要有一个专门用来解决转换问题的工具，毕竟每一个字段都 get/set 会很麻烦。 Ma">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2019-10-17T02:59:24.337Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="masterliheng的博客">
-<meta name="twitter:description" content="一个菜鸡的学习之路">
+<meta name="twitter:title" content="Java 实体映射工具 MapStruct">
+<meta name="twitter:description" content="在一个成熟的工程中，尤其是现在的分布式系统中，应用与应用之间，还有单独的应用细分模块之后，DO 一般不会让外部依赖，这时候需要在提供对外接口的模块里放 DTO 用于对象传输，也即是 DO 对象对内，DTO对象对外，DTO 可以根据业务需要变更，并不需要映射 DO 的全部属性。 这种 对象与对象之间的互相转换，就需要有一个专门用来解决转换问题的工具，毕竟每一个字段都 get/set 会很麻烦。 Ma">
 
 
 
@@ -118,13 +120,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/17/Java-实体映射工具-MapStruct/">
 
 
 
 
 
-  <title>masterliheng的博客</title>
+  <title>Java 实体映射工具 MapStruct | masterliheng的博客</title>
   
 
 
@@ -143,8 +145,7 @@
     
   
 
-  <div class="container sidebar-position-left 
-  page-home">
+  <div class="container sidebar-position-left page-post-detail">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -237,9 +238,9 @@
         <div class="content-wrap">
           <div id="content" class="content">
             
-  <section id="posts" class="posts-expand">
+
+  <div id="posts" class="posts-expand">
     
-      
 
   
 
@@ -269,9 +270,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2019/10/17/Java-实体映射工具-MapStruct/" itemprop="url">Java 实体映射工具 MapStruct</a></h1>
+          <h1 class="post-title" itemprop="name headline">Java 实体映射工具 MapStruct</h1>
         
 
         <div class="post-meta">
@@ -319,6 +318,16 @@
 
           
             
+              <span class="post-comments-count">
+                <span class="post-meta-divider">|</span>
+                <span class="post-meta-item-icon">
+                  <i class="fa fa-comment-o"></i>
+                </span>
+                <a href="/2019/10/17/Java-实体映射工具-MapStruct/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/10/17/Java-实体映射工具-MapStruct/" itemprop="commentsCount"></span>
+                </a>
+              </span>
+            
           
 
           
@@ -343,9 +352,7 @@
       
 
       
-        
-          
-            <p>在一个成熟的工程中，尤其是现在的分布式系统中，应用与应用之间，还有单独的应用细分模块之后，DO 一般不会让外部依赖，这时候需要在提供对外接口的模块里放 DTO 用于对象传输，也即是 DO 对象对内，DTO对象对外，DTO 可以根据业务需要变更，并不需要映射 DO 的全部属性。</p>
+        <p>在一个成熟的工程中，尤其是现在的分布式系统中，应用与应用之间，还有单独的应用细分模块之后，DO 一般不会让外部依赖，这时候需要在提供对外接口的模块里放 DTO 用于对象传输，也即是 DO 对象对内，DTO对象对外，DTO 可以根据业务需要变更，并不需要映射 DO 的全部属性。</p>
 <p>这种 对象与对象之间的互相转换，就需要有一个专门用来解决转换问题的工具，毕竟每一个字段都 get/set 会很麻烦。</p>
 <p>MapStruct 就是这样的一个属性映射工具，只需要定义一个 Mapper 接口，MapStruct 就会自动实现这个映射接口，避免了复杂繁琐的映射实现。MapStruct官网地址：<a href="http://mapstruct.org/" target="_blank" rel="noopener">mapstruct.org/</a></p>
 <h3 id="工程中引入-maven-依赖">工程中引入 maven 依赖</h3>
@@ -695,8 +702,6 @@ ignore: 忽略这个字段<br>
 </ul>
 <p>本文只是写了一些常用的比较简单的一些功能，更详细的可以去阅读官方文档： <a href="http://mapstruct.org/documentation/stable/reference/html/" target="_blank" rel="noopener">mapstruct.org/documentati…</a></p>
 
-          
-        
       
     </div>
     
@@ -711,14 +716,38 @@ ignore: 忽略这个字段<br>
 
     <footer class="post-footer">
       
-
+        <div class="post-tags">
+          
+            <a href="/tags/Java-实体映射工具/" rel="tag"># Java-实体映射工具</a>
+          
+            <a href="/tags/MapStruct/" rel="tag"># MapStruct</a>
+          
+        </div>
       
 
       
+      
+      
 
       
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2019/09/29/java11新特性/" rel="next" title="java 11 新特性">
+                <i class="fa fa-chevron-left"></i> java 11 新特性
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
       
-        <div class="post-eof"></div>
+
+      
       
     </footer>
   </div>
@@ -728,14 +757,11 @@ ignore: 忽略这个字段<br>
   </article>
 
 
-    
-  </section>
 
-  
-  <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/4/">4</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
-  </nav>
-
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -743,6 +769,17 @@ ignore: 忽略这个字段<br>
 
 
           
+
+  
+    <div class="comments" id="comments">
+      
+        <div id="gitment-container"></div>
+      
+    </div>
+
+  
+
+
 
         </div>
         
@@ -763,8 +800,17 @@ ignore: 忽略这个字段<br>
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap">
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview-wrap">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview-wrap sidebar-panel sidebar-panel-active">
+      <section class="site-overview-wrap sidebar-panel">
         <div class="site-overview">
           <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
             
@@ -842,6 +888,22 @@ ignore: 忽略这个字段<br>
         </div>
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#工程中引入-maven-依赖"><span class="nav-number">1.</span> <span class="nav-text">工程中引入 maven 依赖</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#基本映射"><span class="nav-number">2.</span> <span class="nav-text">基本映射</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#多对一"><span class="nav-number">3.</span> <span class="nav-text">多对一</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#可以添加自定义方法"><span class="nav-number">4.</span> <span class="nav-text">可以添加自定义方法</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#如果已经有了接收对象-更新目标对象"><span class="nav-number">4.1.</span> <span class="nav-text">如果已经有了接收对象，更新目标对象</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#spring-注入的方式"><span class="nav-number">4.2.</span> <span class="nav-text">Spring 注入的方式</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#mapstruct-注解的关键词"><span class="nav-number">4.3.</span> <span class="nav-text">MapStruct 注解的关键词</span></a></li></ol></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -982,6 +1044,10 @@ ignore: 忽略这个字段<br>
 
 
   
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.4"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.4"></script>
+
+
 
   
 
@@ -1028,6 +1094,30 @@ ignore: 忽略这个字段<br>
 
     
 
+    
+      <script type="text/javascript">
+      function renderGitment(){
+        var gitment = new Gitmint({
+            id: window.location.pathname, 
+            owner: 'LiHeng',
+            repo: 'LiHeng.github.io',
+            
+            lang: "" || navigator.language || navigator.systemLanguage || navigator.userLanguage,
+            
+            oauth: {
+            
+            
+                client_secret: '74be7563252e332f276a83ce6f5c4b65d6522b7e',
+            
+                client_id: 'a2a9d50e38d6dbb7f8b1'
+            }});
+        gitment.render('gitment-container');
+      }
+
+      
+      renderGitment();
+      
+      </script>
     
 
 
