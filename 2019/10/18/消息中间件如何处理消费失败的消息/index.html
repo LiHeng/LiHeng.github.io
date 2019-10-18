@@ -68,7 +68,7 @@
 
 
 
-  <meta name="keywords" content="hexo,github pages,">
+  <meta name="keywords" content="消息中间件,消息消费,">
 
 
 
@@ -79,26 +79,21 @@
 
 
 
-<meta name="description" content="环境准备 hexo 是依赖于nodejs环境的，所以首先需要安装nodejs，然后后面需要将博客上传到github，所以我们要安装git，相信大家对这两个软件的安装过程都非常熟悉了（直接到对应的官网上下载.dmg安装包，然后一路next的傻瓜式安装方式）😘 😎。 安装hexo 在终端输入 1$ sudo npm install -g hexo-cli 在安装途中可能会出现如下的错误  这是因为">
-<meta name="keywords" content="hexo,github pages">
+<meta name="description" content="消息中间件在生产系统中的使用 下图是一个非常典型的生产环境的问题，很多公司都会在生产系统里使用MQ，即消息队列。 也就是说，一个系统跟另外一个系统之间进行通信的时候，假如系统A希望发送一个消息给系统B，让他去处理。 但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。 至于怎么处理，是否处理完毕，什么时">
+<meta name="keywords" content="消息中间件,消息消费">
 <meta property="og:type" content="article">
-<meta property="og:title" content="mac 利用hexo搭建自己的博客网站">
-<meta property="og:url" content="http://yoursite.com/2019/09/28/mac-利用hexo搭建自己的博客网站/index.html">
+<meta property="og:title" content="消息中间件如何处理消费失败的消息">
+<meta property="og:url" content="http://yoursite.com/2019/10/18/消息中间件如何处理消费失败的消息/index.html">
 <meta property="og:site_name" content="masterliheng的博客">
-<meta property="og:description" content="环境准备 hexo 是依赖于nodejs环境的，所以首先需要安装nodejs，然后后面需要将博客上传到github，所以我们要安装git，相信大家对这两个软件的安装过程都非常熟悉了（直接到对应的官网上下载.dmg安装包，然后一路next的傻瓜式安装方式）😘 😎。 安装hexo 在终端输入 1$ sudo npm install -g hexo-cli 在安装途中可能会出现如下的错误  这是因为">
+<meta property="og:description" content="消息中间件在生产系统中的使用 下图是一个非常典型的生产环境的问题，很多公司都会在生产系统里使用MQ，即消息队列。 也就是说，一个系统跟另外一个系统之间进行通信的时候，假如系统A希望发送一个消息给系统B，让他去处理。 但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。 至于怎么处理，是否处理完毕，什么时">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/hexo/error.png">
-<meta property="og:image" content="http://yoursite.com/images/hexo/local.png">
-<meta property="og:image" content="http://yoursite.com/images/hexo/configtheme.png">
-<meta property="og:image" content="http://yoursite.com/images/hexo/local-next.png">
-<meta property="og:image" content="http://yoursite.com/images/hexo/newrepo.png">
-<meta property="og:image" content="http://yoursite.com/images/hexo/config-repo.png">
-<meta property="og:image" content="http://yoursite.com/images/hexo/repo-files.png">
-<meta property="og:updated_time" content="2019-09-29T03:46:06.557Z">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrEoNw0EmzxoPgllpaIVYlj3WaI4lwt9QEKG3WSef0qiaCk66ib4nvm04g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrOLZXul5Oxrw0wj04SMNziaiaI8UJkFUU4CDlVZrK0owHib8UfNhOjwVCA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:updated_time" content="2019-10-18T13:20:25.621Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="mac 利用hexo搭建自己的博客网站">
-<meta name="twitter:description" content="环境准备 hexo 是依赖于nodejs环境的，所以首先需要安装nodejs，然后后面需要将博客上传到github，所以我们要安装git，相信大家对这两个软件的安装过程都非常熟悉了（直接到对应的官网上下载.dmg安装包，然后一路next的傻瓜式安装方式）😘 😎。 安装hexo 在终端输入 1$ sudo npm install -g hexo-cli 在安装途中可能会出现如下的错误  这是因为">
-<meta name="twitter:image" content="http://yoursite.com/images/hexo/error.png">
+<meta name="twitter:title" content="消息中间件如何处理消费失败的消息">
+<meta name="twitter:description" content="消息中间件在生产系统中的使用 下图是一个非常典型的生产环境的问题，很多公司都会在生产系统里使用MQ，即消息队列。 也就是说，一个系统跟另外一个系统之间进行通信的时候，假如系统A希望发送一个消息给系统B，让他去处理。 但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。 至于怎么处理，是否处理完毕，什么时">
+<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrEoNw0EmzxoPgllpaIVYlj3WaI4lwt9QEKG3WSef0qiaCk66ib4nvm04g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
 
 
 
@@ -128,13 +123,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2019/09/28/mac-利用hexo搭建自己的博客网站/">
+  <link rel="canonical" href="http://yoursite.com/2019/10/18/消息中间件如何处理消费失败的消息/">
 
 
 
 
 
-  <title>mac 利用hexo搭建自己的博客网站 | masterliheng的博客</title>
+  <title>消息中间件如何处理消费失败的消息 | masterliheng的博客</title>
   
 
 
@@ -261,7 +256,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/09/28/mac-利用hexo搭建自己的博客网站/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/18/消息中间件如何处理消费失败的消息/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="masterliheng">
@@ -278,7 +273,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">mac 利用hexo搭建自己的博客网站</h1>
+          <h1 class="post-title" itemprop="name headline">消息中间件如何处理消费失败的消息</h1>
         
 
         <div class="post-meta">
@@ -290,8 +285,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-09-28T21:51:02+08:00">
-                2019-09-28
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-18T21:11:22+08:00">
+                2019-10-18
               </time>
             
 
@@ -313,8 +308,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/软件安装/" itemprop="url" rel="index">
-                    <span itemprop="name">软件安装</span>
+                  <a href="/categories/中间件/" itemprop="url" rel="index">
+                    <span itemprop="name">中间件</span>
                   </a>
                 </span>
 
@@ -331,8 +326,8 @@
                 <span class="post-meta-item-icon">
                   <i class="fa fa-comment-o"></i>
                 </span>
-                <a href="/2019/09/28/mac-利用hexo搭建自己的博客网站/#comments" itemprop="discussionUrl">
-                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/09/28/mac-利用hexo搭建自己的博客网站/" itemprop="commentsCount"></span>
+                <a href="/2019/10/18/消息中间件如何处理消费失败的消息/#comments" itemprop="discussionUrl">
+                  <span class="post-comments-count gitment-comments-count" data-xid="/2019/10/18/消息中间件如何处理消费失败的消息/" itemprop="commentsCount"></span>
                 </a>
               </span>
             
@@ -360,44 +355,80 @@
       
 
       
-        <h3 id="环境准备">环境准备</h3>
-<p>hexo 是依赖于nodejs环境的，所以首先需要安装nodejs，然后后面需要将博客上传到github，所以我们要安装git，相信大家对这两个软件的安装过程都非常熟悉了（直接到对应的官网上下载.dmg安装包，然后一路next的傻瓜式安装方式）😘 😎。</p>
-<h3 id="安装hexo">安装hexo</h3>
-<p>在终端输入</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<p>在安装途中可能会出现如下的错误<br>
-<img src="/images/hexo/error.png" alt><br>
-这是因为在安装hexo-cli的时候不能使用sudo，而是需要执行下面两条命令：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ sudo chown -R `whoami` /usr/<span class="built_in">local</span>/lib/node_modules</span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install -g hexo-cli</span><br></pre></td></tr></table></figure>
-<p>这样hexo环境就顺利安装成功了，然后输入命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">$ hexo i blog // 建立一个名为blog的项目名，用与存放blog文件</span><br><span class="line">$ <span class="built_in">cd</span> blog</span><br><span class="line">$ hexo g // 本地编译</span><br><span class="line">$ hexo s // 本地预览</span><br></pre></td></tr></table></figure>
-<p>然后打开浏览器，输入网址 <a href="http://localhost:4000" target="_blank" rel="noopener">http://localhost:4000</a>，这样就可以在本地预览自己的博客网站了，是不是有点小激动呢！<br>
-<img src="/images/hexo/local.png" alt></p>
-<h3 id="切换hexo博客主题">切换hexo博客主题</h3>
-<p>博客网页上默认的主题为loadscape的主题，不同主题有不同的功能布局外观，主题也可以自己写，但是本人用的是网上的主题，这里放上一些主题：<br>
-<a href="https://github.com/hexojs/hexo/wiki/Themes" target="_blank" rel="noopener">https://github.com/hexojs/hexo/wiki/Themes</a></p>
-<p>next是比较流行的一个hexo主题，本人也是使用的改主题，输入如下命令来获取next主题（当前所在目录为blog）：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ git <span class="built_in">clone</span> https://github.com/iissnan/hexo-theme-next themes/next</span><br></pre></td></tr></table></figure>
-<p>然后找到blog文件夹下名为_config.yml的配置文件，将里面的theme改为next<br>
-<img src="/images/hexo/configtheme.png" alt><br>
-然后输入如下命令，</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo s</span><br></pre></td></tr></table></figure>
-<p>可以看到博客页面变为如下的样式，另外还可以对样式进行定制，这就需要修改next文件夹下的_config.yml文件，具体设置方式可以参考next主题的网站 <a href="https://theme-next.iissnan.com/" target="_blank" rel="noopener">https://theme-next.iissnan.com/</a><br>
-<img src="/images/hexo/local-next.png" alt></p>
-<h3 id="将本地博客文件上传到github并配置github-pages">将本地博客文件上传到github并配置github pages</h3>
-<p>首先需要在github上新建一个仓库，仓库的名称的格式为： <a href="http://xn--eqr924avxo.github.io" target="_blank" rel="noopener">用户名.github.io</a>，另外记得将最后一项勾选上<br>
-<img src="/images/hexo/newrepo.png" alt><br>
-然后需要把本地blog文件夹的内容上传到github，打开之前blog文件夹下的_config.yml配置文件，把文件中的最后几行改成<br>
-如下的内容：<br>
-<img src="/images/hexo/config-repo.png" alt><br>
-然后运行如下的命令装一个hexo部署到git的工具插件</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ npm install hexo-deployer-git --save</span><br></pre></td></tr></table></figure>
-<p>然后输入如下命令，将blog本地文件上传到github</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">$ hexo clean</span><br><span class="line">$ hexo g</span><br><span class="line">$ hexo d</span><br></pre></td></tr></table></figure>
-<p>最后在github新建的仓库里面就多了如下的文件：<br>
-<img src="/images/hexo/repo-files.png" alt></p>
-<p>在浏览器里面输入https://liheng.github.io 就可以访问自己的博客了 😋 ！！！！</p>
+        <h2 id="消息中间件在生产系统中的使用">消息中间件在生产系统中的使用</h2>
+<p>下图是一个非常典型的生产环境的问题，很多公司都会在生产系统里使用MQ，即消息队列。</p>
+<p>也就是说，一个系统跟另外一个系统之间进行通信的时候，假如系统A希望发送一个消息给系统B，让他去处理。</p>
+<p>但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。</p>
+<p>至于怎么处理，是否处理完毕，什么时候处理，都是系统B的事儿，与系统A无关。</p>
+<p>上述过程，可以通过下图看的很清晰：<br>
+<img src="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrEoNw0EmzxoPgllpaIVYlj3WaI4lwt9QEKG3WSef0qiaCk66ib4nvm04g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt></p>
+<p>这样的一种通信方式，就是所谓的“异步”通信方式</p>
+<p>对于系统A来说，只要把消息发给MQ，然后系统B就会异步的去进行处理了，系统A不需要“同步”的等待系统B处理完。</p>
+<p>这样的好处是什么呢？</p>
+<p>两个字：解耦</p>
+<p>系统A要跟系统B通信，但是他不需要关注系统B如何处理的一些细节。我们来举几个例子说明：</p>
+<p>比如，A不需要关注B什么时候处理完，这样假如系统B处理一个消息要耗费10分钟也不关系统A的事儿。</p>
+<p>否则，系统A直接调用系统B的接口，系统B一下子处理了10分钟怎么办？难不成系统A也阻塞等待10分钟？</p>
+<p>再比如，系统A不需要关注系统B处理成功与否，即使系统B处理失败了，也是系统B自己去考虑这个场景和重新尝试处理。</p>
+<p>否则如果系统调用系统B的接口，万一处理失败了报错了，系统A受到一个调用异常该怎么处理？</p>
+<p>还有，系统A不需要关注系统B是否存活。万一要是系统B挂掉了，系统A通过MQ来通信也不需要管系统B的“死活”，系统B自己恢复了之后就可以从MQ消费消息再次处理即可。</p>
+<p>否则系统A直接调用系统B的接口，万一系统B挂了，难道系统A还要把消息暂存到数据库？等待系统B恢复了再给他发过去吗？</p>
+<p>这就是通过MQ进行异步通信，让两个系统解耦之后的好处，可以大幅度提升整个大系统的容错性，增加系统的弹性，而不是处处耦合，一个系统出错连带导致其他系统全部出错。</p>
+<p>解耦之后，即使出错也只是大系统中的一个系统B出错而已，不影响别人。</p>
+<h2 id="生产案例：早教盒子app的发货">生产案例：早教盒子APP的发货</h2>
+<p>接下来用一个经典的生产案例给大家说说MQ在生产的使用。现在很多早教类的APP，都会提供早教盒子，什么意思呢？</p>
+<p>早教APP提供的核心服务就是三块：</p>
+<ol>
+<li>APP里的早教视频课程</li>
+<li>线上微信群的助教答疑指导</li>
+<li>线下送你早教盒子，里面有很多上课道具</li>
+</ol>
+<p>这样一个妈妈陪伴孩子上早教的过程可能是这样的：</p>
+<ul>
+<li>首先在APP里看早教视频课程，孩子看着很感兴趣。</li>
+<li>接着妈妈从早教盒子里取出来道具，陪孩子把视频里的游戏和任务都做一遍，让孩子加深印象。</li>
+<li>最后每天妈妈会打卡，有助教会来给妈妈进行答疑。</li>
+</ul>
+<p>所以说，假设现在我们要在一个早教APP里购买一个早教课程，他的流程大致如下：</p>
+<ul>
+<li>
+<p>选择购买早教课程</p>
+</li>
+<li>
+<p>直接支付</p>
+</li>
+<li>
+<p>创建订单</p>
+</li>
+<li>
+<p>给用户增加课程权限</p>
+</li>
+<li>
+<p>通知仓库准备发早教盒子</p>
+</li>
+<li>
+<p>通知物流公司去仓库取早教盒子进行配送。</p>
+</li>
+</ul>
+<p>我们来分析一下每个环节。首先你要是购买一个早教课程，那么点击“购买”的按钮之后，一般直接会跳入一个支付界面。</p>
+<p>这个时候，你就可以直接选择支付了。此时后台系统一定会通过支付系统跟第三方支付系统进行通信，比如说支付宝、微信之类的，然后等待支付完成。</p>
+<p>一旦支付完成，就会在自己内部系统干两个事：</p>
+<ul>
+<li>
+<p>第一，给这个用户id创建一个订单；</p>
+</li>
+<li>
+<p>第二，给这个用户id增加看某个早教视频课程的权限。</p>
+</li>
+</ul>
+<p>此时用户其实在“我的订单”界面就可以看到自己的订单了，而且在“我的课程”界面，就可以开始看早教课程的视频了。</p>
+<p>下图展示了这个过程：<br>
+<img src="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrOLZXul5Oxrw0wj04SMNziaiaI8UJkFUU4CDlVZrK0owHib8UfNhOjwVCA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt></p>
+<p>但是现在问题主要在后面两个步骤，现在你的订单系统作为核心入口，他要通知仓库系统去扣减一个早教盒子的库存。</p>
+<p>同时，还得准备好早教盒子的发货（比如说提前打包装箱，准备一些给快递公司使用的发货单之类的，需要帖子箱子上）。然后通知第三方物流公司的系统，可以去自己的仓库取早教盒子发货了。</p>
+<p>这两个步骤需要涉及到对仓库系统以及第三方物流公司系统的调用，那么是采用订单系统直接同步调用那两个系统的方式吗？</p>
+<p>恐怕不妥，因为这里最大的问题就是性能问题和可用性问题。</p>
+<p>举个例子，假如现在仓库系统部署在其他地方，因为网络问题导致性能很差，访问速度很慢，那么是不是可能会导致用户支付之后，等待了几分钟都看不到整个流程的完成？</p>
 
       
     </div>
@@ -415,9 +446,9 @@
       
         <div class="post-tags">
           
-            <a href="/tags/hexo/" rel="tag"># hexo</a>
+            <a href="/tags/消息中间件/" rel="tag"># 消息中间件</a>
           
-            <a href="/tags/github-pages/" rel="tag"># github pages</a>
+            <a href="/tags/消息消费/" rel="tag"># 消息消费</a>
           
         </div>
       
@@ -430,8 +461,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2019/09/27/hello-world/" rel="next" title="Hello World">
-                <i class="fa fa-chevron-left"></i> Hello World
+              <a href="/2019/10/17/世界上最好的学习法：费曼学习法/" rel="next" title="世界上最好的学习法：费曼学习法">
+                <i class="fa fa-chevron-left"></i> 世界上最好的学习法：费曼学习法
               </a>
             
           </div>
@@ -439,10 +470,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2019/09/29/java11新特性/" rel="prev" title="java 11 新特性">
-                java 11 新特性 <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -599,7 +626,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-3"><a class="nav-link" href="#环境准备"><span class="nav-number">1.</span> <span class="nav-text">环境准备</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#安装hexo"><span class="nav-number">2.</span> <span class="nav-text">安装hexo</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#切换hexo博客主题"><span class="nav-number">3.</span> <span class="nav-text">切换hexo博客主题</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#将本地博客文件上传到github并配置github-pages"><span class="nav-number">4.</span> <span class="nav-text">将本地博客文件上传到github并配置github pages</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#消息中间件在生产系统中的使用"><span class="nav-number">1.</span> <span class="nav-text">消息中间件在生产系统中的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产案例：早教盒子app的发货"><span class="nav-number">2.</span> <span class="nav-text">生产案例：早教盒子APP的发货</span></a></li></ol></div>
             
 
           </div>
