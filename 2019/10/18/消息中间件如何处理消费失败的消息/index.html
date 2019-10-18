@@ -89,7 +89,9 @@
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrEoNw0EmzxoPgllpaIVYlj3WaI4lwt9QEKG3WSef0qiaCk66ib4nvm04g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
 <meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrOLZXul5Oxrw0wj04SMNziaiaI8UJkFUU4CDlVZrK0owHib8UfNhOjwVCA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
-<meta property="og:updated_time" content="2019-10-18T13:20:25.621Z">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrf5w4K5rRSBUMjbP550ia1wZk8PbiaiaBhzDic6G3MyvYzb4remhicrPORfg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrAW1IfC5pMIKO2l5SajWexuZPaaEgmGJocQY7zKYv3I5jPx5fTk11eQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta property="og:updated_time" content="2019-10-18T14:03:36.325Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="消息中间件如何处理消费失败的消息">
 <meta name="twitter:description" content="消息中间件在生产系统中的使用 下图是一个非常典型的生产环境的问题，很多公司都会在生产系统里使用MQ，即消息队列。 也就是说，一个系统跟另外一个系统之间进行通信的时候，假如系统A希望发送一个消息给系统B，让他去处理。 但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。 至于怎么处理，是否处理完毕，什么时">
@@ -429,6 +431,30 @@
 <p>这两个步骤需要涉及到对仓库系统以及第三方物流公司系统的调用，那么是采用订单系统直接同步调用那两个系统的方式吗？</p>
 <p>恐怕不妥，因为这里最大的问题就是性能问题和可用性问题。</p>
 <p>举个例子，假如现在仓库系统部署在其他地方，因为网络问题导致性能很差，访问速度很慢，那么是不是可能会导致用户支付之后，等待了几分钟都看不到整个流程的完成？</p>
+<p>或者要是说第三方物流公司的系统现在要是故障了，暂时无法访问，那么会不会导致用户支付了之后，一直没有给用户发货早教盒子？</p>
+<p>所以说，在这里就应该引入MQ，订单系统在完成订单的创建以及课程的分配之后，就可以发送一个消息到MQ，然后有一个专门的仓储系统负责消费这个消息，接着尝试去调用独立仓库系统通知发货，以及通知第三方物流系统去配送。</p>
+<p>整个过程，如下图所示：<br>
+<img src="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrf5w4K5rRSBUMjbP550ia1wZk8PbiaiaBhzDic6G3MyvYzb4remhicrPORfg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt></p>
+<p>这么做有什么好处呢？</p>
+<p>好处是显而易见的，假如现在独立仓库系统和第三方物流系统的访问性能突然变得很差，大不了就是仓储系统在后面慢慢的跟人家通信等着人家处理完毕好了，对订单系统是没影响的。</p>
+<p>对于订单系统而言，创建订单和分配课程都是速度很快的，然后发送个消息到MQ速度也很快。</p>
+<p>这样一来，用户看到的就是一两秒的时间支付就成功了，然后可以查到订单，看到自己的课程，然后订单的物流显示的是“待配送”的状态。</p>
+<p>那么如果独立仓库系统或者第三方物流系统故障了，导致仓储系统消费到一条订单消息之后，尝试进行发货失败，也就是对这条消费到的消息处理失败。这种情况，怎么处理？</p>
+<p>这就是本文最核心的地方了！！！</p>
+<h2 id="死信队列的使用：处理失败的消息">死信队列的使用：处理失败的消息</h2>
+<p>一般生产环境中，如果你有丰富的架构设计经验，都会在使用MQ的时候设计两个队列：一个是核心业务队列，一个是死信队列。</p>
+<p>核心业务队列，就是比如上面专门用来让订单系统发送订单消息的，然后另外一个死信队列就是用来处理异常情况的。</p>
+<p>之所以我们这篇文章抛出一个面试题，结果先长篇大论说一个生产实践案例和业务场景，就是因为面试被问到这个问题时，必须要结合你自己的业务实践经验来说。</p>
+<p>你需要先给面试官说有血有肉的业务系统场景，然后再结合这个场景回答他的问题，因为面试官想听的就是你真实的实践经验。</p>
+<p>比如说要是第三方物流系统故障了，此时无法请求，那么仓储系统每次消费到一条订单消息，尝试通知发货和配送，都会遇到对方的接口报错。</p>
+<p>此时仓储系统就可以把这条消息拒绝访问，或者标志位处理失败！注意，这个步骤很重要。</p>
+<p>一旦标志这条消息处理失败了之后，MQ就会把这条消息转入提前设置好的一个死信队列中。</p>
+<p>然后你会看到的就是，在第三方物流系统故障期间，所有订单消息全部处理失败，全部会转入死信队列。</p>
+<p>然后你的仓储系统得专门有一个后台线程，监控第三方物流系统是否正常，能否请求的，不停的监视。</p>
+<p>一旦发现对方恢复正常，这个后台线程就从死信队列消费出来处理失败的订单，重新执行发货和配送的通知逻辑。</p>
+<p>死信队列的使用，其实就是MQ在生产实践中非常重要的一环，也就是架构设计必须要考虑的。</p>
+<p>最终的架构图，如下所示：</p>
+<p><img src="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrAW1IfC5pMIKO2l5SajWexuZPaaEgmGJocQY7zKYv3I5jPx5fTk11eQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt></p>
 
       
     </div>
@@ -626,7 +652,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#消息中间件在生产系统中的使用"><span class="nav-number">1.</span> <span class="nav-text">消息中间件在生产系统中的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产案例：早教盒子app的发货"><span class="nav-number">2.</span> <span class="nav-text">生产案例：早教盒子APP的发货</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#消息中间件在生产系统中的使用"><span class="nav-number">1.</span> <span class="nav-text">消息中间件在生产系统中的使用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#生产案例：早教盒子app的发货"><span class="nav-number">2.</span> <span class="nav-text">生产案例：早教盒子APP的发货</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#死信队列的使用：处理失败的消息"><span class="nav-number">3.</span> <span class="nav-text">死信队列的使用：处理失败的消息</span></a></li></ol></div>
             
 
           </div>
