@@ -87,15 +87,15 @@
 <meta property="og:site_name" content="masterliheng的博客">
 <meta property="og:description" content="消息中间件在生产系统中的使用 下图是一个非常典型的生产环境的问题，很多公司都会在生产系统里使用MQ，即消息队列。 也就是说，一个系统跟另外一个系统之间进行通信的时候，假如系统A希望发送一个消息给系统B，让他去处理。 但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。 至于怎么处理，是否处理完毕，什么时">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrEoNw0EmzxoPgllpaIVYlj3WaI4lwt9QEKG3WSef0qiaCk66ib4nvm04g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
-<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrOLZXul5Oxrw0wj04SMNziaiaI8UJkFUU4CDlVZrK0owHib8UfNhOjwVCA/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
-<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrf5w4K5rRSBUMjbP550ia1wZk8PbiaiaBhzDic6G3MyvYzb4remhicrPORfg/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
-<meta property="og:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrAW1IfC5pMIKO2l5SajWexuZPaaEgmGJocQY7zKYv3I5jPx5fTk11eQ/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
-<meta property="og:updated_time" content="2019-10-18T14:03:36.325Z">
+<meta property="og:image" content="http://yoursite.com/images/message-middleware/B68457CF-BDFF-4B7F-BE5F-E341E8AF579C.png">
+<meta property="og:image" content="http://yoursite.com/images/message-middleware/4E81E820-596B-469A-9F41-9007CF0FDAA0.png">
+<meta property="og:image" content="http://yoursite.com/images/message-middleware/9117B03A-8E29-4EC7-A334-D8C45D4D92F9.png">
+<meta property="og:image" content="http://yoursite.com/images/message-middleware/1870E163-C9AE-4ABC-BA27-33D1FC078ECB.png">
+<meta property="og:updated_time" content="2019-10-18T14:13:50.148Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="消息中间件如何处理消费失败的消息">
 <meta name="twitter:description" content="消息中间件在生产系统中的使用 下图是一个非常典型的生产环境的问题，很多公司都会在生产系统里使用MQ，即消息队列。 也就是说，一个系统跟另外一个系统之间进行通信的时候，假如系统A希望发送一个消息给系统B，让他去处理。 但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。 至于怎么处理，是否处理完毕，什么时">
-<meta name="twitter:image" content="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrEoNw0EmzxoPgllpaIVYlj3WaI4lwt9QEKG3WSef0qiaCk66ib4nvm04g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1">
+<meta name="twitter:image" content="http://yoursite.com/images/message-middleware/B68457CF-BDFF-4B7F-BE5F-E341E8AF579C.png">
 
 
 
@@ -363,7 +363,7 @@
 <p>但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。</p>
 <p>至于怎么处理，是否处理完毕，什么时候处理，都是系统B的事儿，与系统A无关。</p>
 <p>上述过程，可以通过下图看的很清晰：<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrEoNw0EmzxoPgllpaIVYlj3WaI4lwt9QEKG3WSef0qiaCk66ib4nvm04g/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt></p>
+<img src="/images/message-middleware/B68457CF-BDFF-4B7F-BE5F-E341E8AF579C.png" alt></p>
 <p>这样的一种通信方式，就是所谓的“异步”通信方式</p>
 <p>对于系统A来说，只要把消息发给MQ，然后系统B就会异步的去进行处理了，系统A不需要“同步”的等待系统B处理完。</p>
 <p>这样的好处是什么呢？</p>
@@ -425,7 +425,7 @@
 </ul>
 <p>此时用户其实在“我的订单”界面就可以看到自己的订单了，而且在“我的课程”界面，就可以开始看早教课程的视频了。</p>
 <p>下图展示了这个过程：<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrOLZXul5Oxrw0wj04SMNziaiaI8UJkFUU4CDlVZrK0owHib8UfNhOjwVCA/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt></p>
+<img src="/images/message-middleware/4E81E820-596B-469A-9F41-9007CF0FDAA0.png" alt></p>
 <p>但是现在问题主要在后面两个步骤，现在你的订单系统作为核心入口，他要通知仓库系统去扣减一个早教盒子的库存。</p>
 <p>同时，还得准备好早教盒子的发货（比如说提前打包装箱，准备一些给快递公司使用的发货单之类的，需要帖子箱子上）。然后通知第三方物流公司的系统，可以去自己的仓库取早教盒子发货了。</p>
 <p>这两个步骤需要涉及到对仓库系统以及第三方物流公司系统的调用，那么是采用订单系统直接同步调用那两个系统的方式吗？</p>
@@ -434,7 +434,7 @@
 <p>或者要是说第三方物流公司的系统现在要是故障了，暂时无法访问，那么会不会导致用户支付了之后，一直没有给用户发货早教盒子？</p>
 <p>所以说，在这里就应该引入MQ，订单系统在完成订单的创建以及课程的分配之后，就可以发送一个消息到MQ，然后有一个专门的仓储系统负责消费这个消息，接着尝试去调用独立仓库系统通知发货，以及通知第三方物流系统去配送。</p>
 <p>整个过程，如下图所示：<br>
-<img src="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrf5w4K5rRSBUMjbP550ia1wZk8PbiaiaBhzDic6G3MyvYzb4remhicrPORfg/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt></p>
+<img src="/images/message-middleware/9117B03A-8E29-4EC7-A334-D8C45D4D92F9.png" alt></p>
 <p>这么做有什么好处呢？</p>
 <p>好处是显而易见的，假如现在独立仓库系统和第三方物流系统的访问性能突然变得很差，大不了就是仓储系统在后面慢慢的跟人家通信等着人家处理完毕好了，对订单系统是没影响的。</p>
 <p>对于订单系统而言，创建订单和分配课程都是速度很快的，然后发送个消息到MQ速度也很快。</p>
@@ -454,7 +454,7 @@
 <p>一旦发现对方恢复正常，这个后台线程就从死信队列消费出来处理失败的订单，重新执行发货和配送的通知逻辑。</p>
 <p>死信队列的使用，其实就是MQ在生产实践中非常重要的一环，也就是架构设计必须要考虑的。</p>
 <p>最终的架构图，如下所示：</p>
-<p><img src="https://mmbiz.qpic.cn/mmbiz_png/vnOqylzBGCRsI7q4d47sUSHoZAO0qrZrAW1IfC5pMIKO2l5SajWexuZPaaEgmGJocQY7zKYv3I5jPx5fTk11eQ/640?wx_fmt=png&amp;tp=webp&amp;wxfrom=5&amp;wx_lazy=1&amp;wx_co=1" alt></p>
+<p><img src="/images/message-middleware/1870E163-C9AE-4ABC-BA27-33D1FC078ECB.png" alt></p>
 
       
     </div>
