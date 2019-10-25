@@ -252,7 +252,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/18/消息中间件如何处理消费失败的消息/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/25/vscode编译latex文件出错-Package-inputenc-Unicode-character-​-U-200B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="masterliheng">
@@ -271,7 +271,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/18/消息中间件如何处理消费失败的消息/" itemprop="url">消息中间件如何处理消费失败的消息</a></h1>
+                <a class="post-title-link" href="/2019/10/25/vscode编译latex文件出错-Package-inputenc-Unicode-character-​-U-200B/" itemprop="url">vscode编译latex文件出错: Package inputenc: Unicode character ​ (U+200B)</a></h1>
         
 
         <div class="post-meta">
@@ -283,8 +283,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-18T21:11:22+08:00">
-                2019-10-18
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-25T19:40:45+08:00">
+                2019-10-25
               </time>
             
 
@@ -306,8 +306,8 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/中间件/" itemprop="url" rel="index">
-                    <span itemprop="name">中间件</span>
+                  <a href="/categories/工具使用/" itemprop="url" rel="index">
+                    <span itemprop="name">工具使用</span>
                   </a>
                 </span>
 
@@ -345,105 +345,20 @@
       
         
           
-            <h2 id="消息中间件在生产系统中的使用">消息中间件在生产系统中的使用</h2>
-<p>下图是一个非常典型的生产环境的问题，很多公司都会在生产系统里使用MQ，即消息队列。</p>
-<p>也就是说，一个系统跟另外一个系统之间进行通信的时候，假如系统A希望发送一个消息给系统B，让他去处理。</p>
-<p>但是系统A不关注系统B到底怎么处理或者有没有处理好，所以系统A把消息发送给MQ，然后就不管这条消息的“死活”了，接着系统B从MQ里消费出来处理即可。</p>
-<p>至于怎么处理，是否处理完毕，什么时候处理，都是系统B的事儿，与系统A无关。</p>
-<p>上述过程，可以通过下图看的很清晰：<br>
-<img src="/images/message-middleware/B68457CF-BDFF-4B7F-BE5F-E341E8AF579C.png" alt></p>
-<p>这样的一种通信方式，就是所谓的“异步”通信方式</p>
-<p>对于系统A来说，只要把消息发给MQ，然后系统B就会异步的去进行处理了，系统A不需要“同步”的等待系统B处理完。</p>
-<p>这样的好处是什么呢？</p>
-<p>两个字：解耦</p>
-<p>系统A要跟系统B通信，但是他不需要关注系统B如何处理的一些细节。我们来举几个例子说明：</p>
-<p>比如，A不需要关注B什么时候处理完，这样假如系统B处理一个消息要耗费10分钟也不关系统A的事儿。</p>
-<p>否则，系统A直接调用系统B的接口，系统B一下子处理了10分钟怎么办？难不成系统A也阻塞等待10分钟？</p>
-<p>再比如，系统A不需要关注系统B处理成功与否，即使系统B处理失败了，也是系统B自己去考虑这个场景和重新尝试处理。</p>
-<p>否则如果系统调用系统B的接口，万一处理失败了报错了，系统A受到一个调用异常该怎么处理？</p>
-<p>还有，系统A不需要关注系统B是否存活。万一要是系统B挂掉了，系统A通过MQ来通信也不需要管系统B的“死活”，系统B自己恢复了之后就可以从MQ消费消息再次处理即可。</p>
-<p>否则系统A直接调用系统B的接口，万一系统B挂了，难道系统A还要把消息暂存到数据库？等待系统B恢复了再给他发过去吗？</p>
-<p>这就是通过MQ进行异步通信，让两个系统解耦之后的好处，可以大幅度提升整个大系统的容错性，增加系统的弹性，而不是处处耦合，一个系统出错连带导致其他系统全部出错。</p>
-<p>解耦之后，即使出错也只是大系统中的一个系统B出错而已，不影响别人。</p>
-<h2 id="生产案例：早教盒子app的发货">生产案例：早教盒子APP的发货</h2>
-<p>接下来用一个经典的生产案例给大家说说MQ在生产的使用。现在很多早教类的APP，都会提供早教盒子，什么意思呢？</p>
-<p>早教APP提供的核心服务就是三块：</p>
-<ol>
-<li>APP里的早教视频课程</li>
-<li>线上微信群的助教答疑指导</li>
-<li>线下送你早教盒子，里面有很多上课道具</li>
-</ol>
-<p>这样一个妈妈陪伴孩子上早教的过程可能是这样的：</p>
-<ul>
-<li>首先在APP里看早教视频课程，孩子看着很感兴趣。</li>
-<li>接着妈妈从早教盒子里取出来道具，陪孩子把视频里的游戏和任务都做一遍，让孩子加深印象。</li>
-<li>最后每天妈妈会打卡，有助教会来给妈妈进行答疑。</li>
-</ul>
-<p>所以说，假设现在我们要在一个早教APP里购买一个早教课程，他的流程大致如下：</p>
-<ul>
-<li>
-<p>选择购买早教课程</p>
-</li>
-<li>
-<p>直接支付</p>
-</li>
-<li>
-<p>创建订单</p>
-</li>
-<li>
-<p>给用户增加课程权限</p>
-</li>
-<li>
-<p>通知仓库准备发早教盒子</p>
-</li>
-<li>
-<p>通知物流公司去仓库取早教盒子进行配送。</p>
-</li>
-</ul>
-<p>我们来分析一下每个环节。首先你要是购买一个早教课程，那么点击“购买”的按钮之后，一般直接会跳入一个支付界面。</p>
-<p>这个时候，你就可以直接选择支付了。此时后台系统一定会通过支付系统跟第三方支付系统进行通信，比如说支付宝、微信之类的，然后等待支付完成。</p>
-<p>一旦支付完成，就会在自己内部系统干两个事：</p>
-<ul>
-<li>
-<p>第一，给这个用户id创建一个订单；</p>
-</li>
-<li>
-<p>第二，给这个用户id增加看某个早教视频课程的权限。</p>
-</li>
-</ul>
-<p>此时用户其实在“我的订单”界面就可以看到自己的订单了，而且在“我的课程”界面，就可以开始看早教课程的视频了。</p>
-<p>下图展示了这个过程：<br>
-<img src="/images/message-middleware/4E81E820-596B-469A-9F41-9007CF0FDAA0.png" alt></p>
-<p>但是现在问题主要在后面两个步骤，现在你的订单系统作为核心入口，他要通知仓库系统去扣减一个早教盒子的库存。</p>
-<p>同时，还得准备好早教盒子的发货（比如说提前打包装箱，准备一些给快递公司使用的发货单之类的，需要帖子箱子上）。然后通知第三方物流公司的系统，可以去自己的仓库取早教盒子发货了。</p>
-<p>这两个步骤需要涉及到对仓库系统以及第三方物流公司系统的调用，那么是采用订单系统直接同步调用那两个系统的方式吗？</p>
-<p>恐怕不妥，因为这里最大的问题就是性能问题和可用性问题。</p>
-<p>举个例子，假如现在仓库系统部署在其他地方，因为网络问题导致性能很差，访问速度很慢，那么是不是可能会导致用户支付之后，等待了几分钟都看不到整个流程的完成？</p>
-<p>或者要是说第三方物流公司的系统现在要是故障了，暂时无法访问，那么会不会导致用户支付了之后，一直没有给用户发货早教盒子？</p>
-<p>所以说，在这里就应该引入MQ，订单系统在完成订单的创建以及课程的分配之后，就可以发送一个消息到MQ，然后有一个专门的仓储系统负责消费这个消息，接着尝试去调用独立仓库系统通知发货，以及通知第三方物流系统去配送。</p>
-<p>整个过程，如下图所示：<br>
-<img src="/images/message-middleware/9117B03A-8E29-4EC7-A334-D8C45D4D92F9.png" alt></p>
-<p>这么做有什么好处呢？</p>
-<p>好处是显而易见的，假如现在独立仓库系统和第三方物流系统的访问性能突然变得很差，大不了就是仓储系统在后面慢慢的跟人家通信等着人家处理完毕好了，对订单系统是没影响的。</p>
-<p>对于订单系统而言，创建订单和分配课程都是速度很快的，然后发送个消息到MQ速度也很快。</p>
-<p>这样一来，用户看到的就是一两秒的时间支付就成功了，然后可以查到订单，看到自己的课程，然后订单的物流显示的是“待配送”的状态。</p>
-<p>那么如果独立仓库系统或者第三方物流系统故障了，导致仓储系统消费到一条订单消息之后，尝试进行发货失败，也就是对这条消费到的消息处理失败。这种情况，怎么处理？</p>
-<p>这就是本文最核心的地方了！！！</p>
-<h2 id="死信队列的使用：处理失败的消息">死信队列的使用：处理失败的消息</h2>
-<p>一般生产环境中，如果你有丰富的架构设计经验，都会在使用MQ的时候设计两个队列：一个是核心业务队列，一个是死信队列。</p>
-<p>核心业务队列，就是比如上面专门用来让订单系统发送订单消息的，然后另外一个死信队列就是用来处理异常情况的。</p>
-<p>之所以我们这篇文章抛出一个面试题，结果先长篇大论说一个生产实践案例和业务场景，就是因为面试被问到这个问题时，必须要结合你自己的业务实践经验来说。</p>
-<p>你需要先给面试官说有血有肉的业务系统场景，然后再结合这个场景回答他的问题，因为面试官想听的就是你真实的实践经验。</p>
-<p>比如说要是第三方物流系统故障了，此时无法请求，那么仓储系统每次消费到一条订单消息，尝试通知发货和配送，都会遇到对方的接口报错。</p>
-<p>此时仓储系统就可以把这条消息拒绝访问，或者标志位处理失败！注意，这个步骤很重要。</p>
-<p>一旦标志这条消息处理失败了之后，MQ就会把这条消息转入提前设置好的一个死信队列中。</p>
-<p>然后你会看到的就是，在第三方物流系统故障期间，所有订单消息全部处理失败，全部会转入死信队列。</p>
-<p>然后你的仓储系统得专门有一个后台线程，监控第三方物流系统是否正常，能否请求的，不停的监视。</p>
-<p>一旦发现对方恢复正常，这个后台线程就从死信队列消费出来处理失败的订单，重新执行发货和配送的通知逻辑。</p>
-<p>死信队列的使用，其实就是MQ在生产实践中非常重要的一环，也就是架构设计必须要考虑的。</p>
-<p>最终的架构图，如下所示：</p>
-<p><img src="/images/message-middleware/1870E163-C9AE-4ABC-BA27-33D1FC078ECB.png" alt></p>
-<p>转载自 <a href="https://mp.weixin.qq.com/s/4GvSmG3uv_pfRvyv40cdYQ" target="_blank" rel="noopener">https://mp.weixin.qq.com/s/4GvSmG3uv_pfRvyv40cdYQ</a></p>
+            <p>对于还在读研究生的童鞋们，写论文可以说是他们最重要的任务了。 写论文最常用的两种工具是word和latex，然而对于理工科的同学们来说，一般在论文中会出现特别多的公式，word虽然好用但是对数学公式的编辑支持不是太好，所以大部分人会选择使用latex来进行论文的写作。</p>
+<p>由于vscode中可以使用latex workshop插件来对latex文件编译生成pdf格式文件，所以有很多人会利用vscode来编辑和编译tex源文件。对于新手来说，在编译的过程中会经常遇到如下的问题：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">Package inputenc: Unicode character ​ (U+200B)</span><br></pre></td></tr></table></figure>
+<p><img src="/images/latex/B39087F5A8593CE52A13815C9C21D6FE.png" alt></p>
+<p>从错误信息字面上看，就是有某些字符latex编译器不认识，所以基本思路就是要找到这些不能识别的字符并将其删除或者替换。</p>
+<p>可以访问如下的链接：<br>
+<a href="https://w3c.github.io/xml-entities/unicode-names.html" target="_blank" rel="noopener">https://w3c.github.io/xml-entities/unicode-names.html</a> 。<br>
+这是一个用于将字符反编码的工具，我们可以将原始文章内容粘贴到上面的文本框中并点击convert按钮，如下图所示：</p>
+<p><img src="/images/latex/2ABF75C0-124D-442D-BA46-1341E2D170B3.png" alt></p>
+<p>然后我们就可以看到文章内容对应的编码表，</p>
+<p><img src="/images/latex/2321D666-7599-467E-918A-C4FF608697D2.png" alt></p>
+<p>然后在网页中搜索“U+200B”这个编码：<br>
+<img src="/images/latex/5DFC55A04418C6E501DDEDF7BD02AE6A.jpg" alt></p>
+<p>可以看出在文章中的&quot;the idea of kernel function&quot;这句话中出现了两个“U+200B”编码字符，我们将这句话删除然后重新编辑即可。</p>
 
           
         
@@ -483,7 +398,7 @@
 
   
   <nav class="pagination">
-    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
+    <span class="page-number current">1</span><a class="page-number" href="/page/2/">2</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/2/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -531,7 +446,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -542,7 +457,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -553,7 +468,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>

@@ -252,7 +252,7 @@
   
   
   <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/17/Java-实体映射工具-MapStruct/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2019/10/17/世界上最好的学习法：费曼学习法/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="masterliheng">
@@ -271,7 +271,7 @@
         
           <h1 class="post-title" itemprop="name headline">
                 
-                <a class="post-title-link" href="/2019/10/17/Java-实体映射工具-MapStruct/" itemprop="url">Java 实体映射工具 MapStruct</a></h1>
+                <a class="post-title-link" href="/2019/10/17/世界上最好的学习法：费曼学习法/" itemprop="url">世界上最好的学习法：费曼学习法</a></h1>
         
 
         <div class="post-meta">
@@ -283,7 +283,7 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-17T10:47:45+08:00">
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2019-10-17T11:57:14+08:00">
                 2019-10-17
               </time>
             
@@ -306,8 +306,19 @@
               
               
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/core-java/" itemprop="url" rel="index">
-                    <span itemprop="name">core java</span>
+                  <a href="/categories/读书/" itemprop="url" rel="index">
+                    <span itemprop="name">读书</span>
+                  </a>
+                </span>
+
+                
+                
+                  ， 
+                
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/读书/方法论/" itemprop="url" rel="index">
+                    <span itemprop="name">方法论</span>
                   </a>
                 </span>
 
@@ -345,362 +356,30 @@
       
         
           
-            <p>在一个成熟的工程中，尤其是现在的分布式系统中，应用与应用之间，还有单独的应用细分模块之后，DO 一般不会让外部依赖，这时候需要在提供对外接口的模块里放 DTO 用于对象传输，也即是 DO 对象对内，DTO对象对外，DTO 可以根据业务需要变更，并不需要映射 DO 的全部属性。</p>
-<p>这种 对象与对象之间的互相转换，就需要有一个专门用来解决转换问题的工具，毕竟每一个字段都 get/set 会很麻烦。</p>
-<p>MapStruct 就是这样的一个属性映射工具，只需要定义一个 Mapper 接口，MapStruct 就会自动实现这个映射接口，避免了复杂繁琐的映射实现。MapStruct官网地址：<a href="http://mapstruct.org/" target="_blank" rel="noopener">mapstruct.org/</a></p>
-<h3 id="工程中引入-maven-依赖">工程中引入 maven 依赖</h3>
-<pre>
-    &lt;properties&gt;
-        &lt;mapstruct.version&gt;1.2.0.Final&lt;/mapstruct.version&gt;
-    &lt;/properties&gt;
-
-    &lt;dependencies&gt;
-        &lt;dependency&gt;
-          &lt;groupId&gt;org.mapstruct&lt;/groupId&gt;
-          &lt;artifactId&gt;mapstruct-jdk8&lt;/artifactId&gt;
-          &lt;version&gt;${mapstruct.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-        &lt;dependency&gt;
-          &lt;groupId&gt;org.mapstruct&lt;/groupId&gt;
-          &lt;artifactId&gt;mapstruct-processor&lt;/artifactId&gt;
-          &lt;version&gt;${mapstruct.version}&lt;/version&gt;
-        &lt;/dependency&gt;
-    &lt;/dependencies&gt;
-</pre>
-<h3 id="基本映射">基本映射</h3>
-<p>这里定义两个 DO 对象 Person 和 User，其中 user 是 Person 的一个属性 ，一个 DTO 对象 PersonDTO</p>
-<pre>
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    public class Person {
-        private Long id;
-        private String name;
-        private String email;
-        private Date birthday;
-        private User user;
-    }
-
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    public class User {
-        private Integer age;
-    }
-
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    public class PersonDTO {
-        private Long id;
-        private String name;
-        /**
-         * 对应 Person.user.age
-         */
-        private Integer age;
-        private String email;
-        /**
-         * 与 DO 里面的字段名称(birthDay)不一致
-         */
-        private Date birth;
-        /**
-         * 对 DO 里面的字段(birthDay)进行拓展,dateFormat 的形式
-         */
-        private String birthDateFormat;
-        /**
-         * 对 DO 里面的字段(birthDay)进行拓展,expression 的形式
-         */
-        private String birthExpressionFormat;
-
-    }
-</pre>
-<p>写一个 Mapper 接口 PersonConverter，其中两个方法，一个是单实体映射，另一个是List映射</p>
-<p>若源对象属性与目标对象属性名字一致，会自动映射对应属性，不一样的需要指定，也可以用 format 转成自己想要的类型，也支持表达式的方式，可以看到像 id、name、email这些名词一致的我并没有指定 source-target，而birthday-birth指定了，转换格式的 birthDateFormat 加了dateFormat 或者 birthExpressionFormat 加了 expression，如果某个属性你不想映射，可以加个 ignore=true</p>
-<pre>
-    @Mapper
-    public interface PersonConverter {
-        PersonConverter INSTANCE = Mappers.getMapper(PersonConverter.class);
-        @Mappings({
-            @Mapping(source = "birthday", target = "birth"),
-            @Mapping(source = "birthday", target = "birthDateFormat", dateFormat = "yyyy-MM-dd HH:mm:ss"),
-            @Mapping(target = "birthExpressionFormat", expression = "java(org.apache.commons.lang3.time.DateFormatUtils.format(person.getBirthday(),\"yyyy-MM-dd HH:mm:ss\"))"),
-            @Mapping(source = "user.age", target = "age"),
-            @Mapping(target = "email", ignore = true)
-        })
-        PersonDTO domain2dto(Person person);
-
-        List&lt;PersonDTO&gt; domain2dto(List&lt;Person&gt; people);
-    }
-</pre>
-<p>编译MapStruct之后，手工编译或者启动 IDE 的时候 IDE 也会帮我们编译， 会自动在 target/classes 下生成对应的实现类</p>
-<pre>
-手工编译命令
-    mvn compile
-</pre>
-<p>注意！！！下面这个 PersonConverterImpl 是自动生成的，不是自己写的！</p>
-<pre>
-    public class PersonConverterImpl implements PersonConverter {
-        public PersonConverterImpl() {
-        }
-
-        public PersonDTO domain2dto(Person person) {
-            if (person == null) {
-                return null;
-            } else {
-                PersonDTO personDTO = new PersonDTO();
-                personDTO.setBirth(person.getBirthday());
-                if (person.getBirthday() != null) {
-                    personDTO.setBirthDateFormat((new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")).format(person.getBirthday()));
-                }
-
-                Integer age = this.personUserAge(person);
-                if (age != null) {
-                    personDTO.setAge(age);
-                }
-
-                personDTO.setId(person.getId());
-                personDTO.setName(person.getName());
-                personDTO.setBirthExpressionFormat(DateFormatUtils.format(person.getBirthday(), "yyyy-MM-dd HH:mm:ss"));
-                return personDTO;
-            }
-        }
-
-        public List&lt;PersonDTO&gt; domain2dto(List&lt;Person&gt; people) {
-            if (people == null) {
-                return null;
-            } else {
-                List&lt;PersonDTO&gt; list = new ArrayList(people.size());
-                Iterator var3 = people.iterator();
-
-                while(var3.hasNext()) {
-                    Person person = (Person)var3.next();
-                    list.add(this.domain2dto(person));
-                }
-
-                return list;
-            }
-        }
-
-        private Integer personUserAge(Person person) {
-            if (person == null) {
-                return null;
-            } else {
-                User user = person.getUser();
-                if (user == null) {
-                    return null;
-                } else {
-                    Integer age = user.getAge();
-                    return age == null ? null : age;
-                }
-            }
-        }
-    }
-</pre>
-<p>写一个单元测试类 PersonConverterTest 测试一下，看看效果</p>
-<pre>
-    public class PersonConverterTest {
-        @Test
-        public void test() {
-            Person person = new Person(1L,"zhige","zhige.me@gmail.com",new Date(),new User(1));
-            PersonDTO personDTO = PersonConverter.INSTANCE.domain2dto(person);
-            assertNotNull(personDTO);
-            assertEquals(personDTO.getId(), person.getId());
-            assertEquals(personDTO.getName(), person.getName());
-            assertEquals(personDTO.getBirth(), person.getBirthday());
-            String format = DateFormatUtils.format(personDTO.getBirth(), "yyyy-MM-dd HH:mm:ss");
-            assertEquals(personDTO.getBirthDateFormat(),format);
-            assertEquals(personDTO.getBirthExpressionFormat(),format);
-
-            List&lt;Person&gt; people = new ArrayList&lt;&gt;();
-            people.add(person);
-            List&lt;PersonDTO&gt; personDTOs = PersonConverter.INSTANCE.domain2dto(people);
-            assertNotNull(personDTOs);
-        }
-    }
-</pre>
-<h3 id="多对一">多对一</h3>
-<p>MapStruct 可以将几种类型的对象映射为另外一种类型，比如将多个 DO 对象转换为 DTO</p>
-<p>例子</p>
-<ul>
-<li>两个 DO 对象 Item 和 Sku，一个 DTO 对象 SkuDTO</li>
-</ul>
-<pre>
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    public class Item {
-        private Long id;
-        private String title;
-    }
-
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    public class Sku {
-        private Long id;
-        private String code;
-        private Integer price;
-    }
-
-    @NoArgsConstructor
-    @AllArgsConstructor
-    @Data
-    public class SkuDTO {
-        private Long skuId;
-        private String skuCode;
-        private Integer skuPrice;
-        private Long itemId;
-        private String itemName;
-    }
-</pre>
-<ul>
-<li>创建 ItemConverter（映射）接口，MapStruct 就会自动实现该接口</li>
-</ul>
-<pre>
-    @Mapper
-    public interface ItemConverter {
-        ItemConverter INSTANCE = Mappers.getMapper(ItemConverter.class);
-
-        @Mappings({
-                @Mapping(source = "sku.id",target = "skuId"),
-                @Mapping(source = "sku.code",target = "skuCode"),
-                @Mapping(source = "sku.price",target = "skuPrice"),
-                @Mapping(source = "item.id",target = "itemId"),
-                @Mapping(source = "item.title",target = "itemName")
-        })
-        SkuDTO domain2dto(Item item, Sku sku);
-    }
-</pre>
-<ul>
-<li>创建测试类，讲 Item 和 Sku 两个 DO对象，映射成一个 DTO 对象 SkuDTO</li>
-</ul>
-<pre>
-    public class ItemConverterTest {
-        @Test
-        public void test() {
-            Item item = new Item(1L, "iPhone X");
-            Sku sku = new Sku(2L, "phone12345", 1000000);
-            SkuDTO skuDTO = ItemConverter.INSTANCE.domain2dto(item, sku);
-            assertNotNull(skuDTO);
-            assertEquals(skuDTO.getSkuId(),sku.getId());
-            assertEquals(skuDTO.getSkuCode(),sku.getCode());
-            assertEquals(skuDTO.getSkuPrice(),sku.getPrice());
-            assertEquals(skuDTO.getItemId(),item.getId());
-            assertEquals(skuDTO.getItemName(),item.getTitle());
-        }
-    }
-</pre>
-<h3 id="添加自定义方法">添加自定义方法</h3>
-<pre>
-    // 形式如下 
-    default PersonDTO personToPersonDTO(Person person) {
-        //hand-written mapping logic
-    }
-
-    // 比如在 PersonConverter 里面加入如下
-    default Boolean convert2Bool(Integer value) {
-        if (value == null || value &lt; 1) {
-            return Boolean.FALSE;
-        } else {
-            return Boolean.TRUE;
-        }
-    }
-
-    default Integer convert2Int(Boolean value) {
-        if (value == null) {
-            return null;
-        }
-        if (Boolean.TRUE.equals(value)) {
-            return 1;
-        }
-        return 0;
-    }
-    // 测试类 PersonConverterTest 加入
-    assertTrue(PersonConverter.INSTANCE.convert2Bool(1));
-    assertEquals((int)PersonConverter.INSTANCE.convert2Int(true),1);
-</pre>
-<h4 id="如果已经有了接收对象-更新目标对象">如果已经有了接收对象，更新目标对象</h4>
-<pre>
-    // 比如在 PersonConverter 里面加入如下，@InheritConfiguration 用于继承刚才的配置
-    @InheritConfiguration(name = "domain2dto")
-    void update(Person person, @MappingTarget PersonDTO personDTO);
-
-    // 测试类 PersonConverterTest 加入如下
-    Person person = new Person(1L,"zhige","zhige.me@gmail.com",new Date(),new User(1));
-    PersonDTO personDTO = PersonConverter.INSTANCE.domain2dto(person);
-    assertEquals("zhige", personDTO.getName());
-    person.setName("xiaozhi");
-    PersonConverter.INSTANCE.update(person, personDTO);
-    assertEquals("xiaozhi", personDTO.getName());
-</pre>
-<h3 id="spring-注入的方式">Spring 注入的方式</h3>
-<pre>
-    // 刚才一直写的例子是默认的方式
-    PersonConverter INSTANCE = Mappers.getMapper(PersonConverter.class);
-</pre>
-<p>还有一种常用的方式，是和常用的框架 Spring 结合，在 @Mapper 后面加入 <code>componentModel=&quot;spring&quot;</code></p>
-<pre>
-    @Mapper(componentModel="spring")
-    public interface PersonConverter {
-        @Mappings({
-            @Mapping(source = "birthday", target = "birth"),
-            @Mapping(source = "birthday", target = "birthDateFormat", dateFormat = "yyyy-MM-dd HH:mm:ss"),
-            @Mapping(target = "birthExpressionFormat", expression = "java(org.apache.commons.lang3.time.DateFormatUtils.format(person.getBirthday(),\"yyyy-MM-dd HH:mm:ss\"))"),
-            @Mapping(source = "user.age", target = "age"),
-            @Mapping(target = "email", ignore = true)
-        })
-        PersonDTO domain2dto(Person person);
-    }
-</pre>
-<p>这时候测试类改一下，我用的 spring boot 的形式</p>
-<pre>
-    @RunWith(SpringRunner.class)
-    @SpringBootTest(classes = BaseTestConfiguration.class)
-    public class PersonConverterTest {
-        //这里把转换器装配进来
-        @Autowired
-        private PersonConverter personConverter;
-        @Test
-        public void test() {
-            Person person = new Person(1L,"zhige","zhige.me@gmail.com",new Date(),new User(1));
-            PersonDTO personDTO = personConverter.domain2dto(person);
-
-            assertNotNull(personDTO);
-            assertEquals(personDTO.getId(), person.getId());
-            assertEquals(personDTO.getName(), person.getName());
-            assertEquals(personDTO.getBirth(), person.getBirthday());
-            String format = DateFormatUtils.format(personDTO.getBirth(), "yyyy-MM-dd HH:mm:ss");
-            assertEquals(personDTO.getBirthDateFormat(),format);
-            assertEquals(personDTO.getBirthExpressionFormat(),format);
-
-        }
-    }
-</pre>
-<p>我 test 路径下加入了一个配置类</p>
-<pre>
-    @EnableAutoConfiguration
-    @Configuration
-    @ComponentScan
-    public class BaseTestConfiguration {
-    }
-</pre>
-<h3 id="mapstruct-注解的关键词">MapStruct 注解的关键词</h3>
-<pre>
-    @Mapper 只有在接口加上这个注解， MapStruct 才会去实现该接口
-        @Mapper 里有个 componentModel 属性，主要是指定实现类的类型，一般用到两个
-        default：默认，可以通过 Mappers.getMapper(Class) 方式获取实例对象
-        spring：在接口的实现类上自动添加注解 @Component，可通过 @Autowired 方式注入
-    @Mapping：属性映射，若源对象属性与目标对象名字一致，会自动映射对应属性
-        source：源属性
-        target：目标属性
-        dateFormat：String 到 Date 日期之间相互转换，通过 SimpleDateFormat，该值为 SimpleDateFormat              的日期格式
-        ignore: 忽略这个字段
-    @Mappings：配置多个@Mapping
-    @MappingTarget 用于更新已有对象
-    @InheritConfiguration 用于继承配置
-</pre>
-<p>本文只是写了一些常用的比较简单的一些功能，更详细的可以去阅读官方文档： <a href="http://mapstruct.org/documentation/stable/reference/html/" target="_blank" rel="noopener">mapstruct.org/documentati…</a></p>
-<p>转载自https://juejin.im/entry/5b228c2651882574b15882ba</p>
+            <p>你是否曾幻想读一遍书就记住所有的内容？是否想学习完一项技能就马上达到巅峰水平？除非你是天才，不然这是不可能的。对于大多数的普通人来说，可以通过笨办法（死记硬背）来达到学习的目的，但效率低下。当然，也可以通过优秀的学习法来进行学习，比如今天讲的“费曼学习法”，可以将你的学习效率极大的提高。</p>
+<p>费曼学习法是由加拿大物理学家费曼所发明的一种高效的学习方法，费曼本身是一个天才，13岁自学微积分，24岁加入曼哈顿计划（核武器计划）；而Google创始人谢尔盖布林都在使用的学习方法，比尔盖茨、乔布斯、拉里佩奇都是费曼学习法的拥戴者。</p>
+<p><img src="https://www.choupangxia.com/wp-content/uploads/2019/09/1-1.jpeg" alt="世界上最好的学习法：费曼学习法插图"></p>
+<p>加拿大人斯科特.H.杨（Scott H Young）使用这种方法，只用一年时间自学完成了 MIT 公开课上的 33 门计算机科学课程，正常情况下需要四年才能修完，并最终通过了所有考试！</p>
+<p>另外有一则报道说：一个农民让自己的孩子每天去学校上课回来教学过的内容，这样可以一份学费学两次，就这么一个单纯的想法，他的孩子学习成绩一直很优异最终考上了清华。</p>
+<p>不论上面的报道是否属实，但它正是费曼学习法的典型体现。费曼学习法用通俗易懂的话来说就是：通过向别人清楚的解说某一件事，来确认自己是否真正弄懂了这件事。</p>
+<p>下面我们就来了解一下费曼学习法的具体操作。</p>
+<p><img src="https://www.choupangxia.com/wp-content/uploads/2019/09/3-1024x361.jpg" alt="世界上最好的学习法：费曼学习法插图(1)" title="世界上最好的学习法：费曼学习法插图(1)"></p>
+<h2 id="第一步：选择目标">第一步：选择目标</h2>
+<p>选择目标的选择很简单，就是确定你要学什么，或要干什么。在这里比如学习一门技术、学习一个科学领域、学习一门语言、学习一个概念等，都可以称作目标。</p>
+<p>但如果想制定非常棒的目标，还可以学习一下SMART原则：Specific具体、Measurable可测量、Attainable可实现、Relevant相关性、Time—based时效性。也就是说计划要具体、可测量、坚持即可实现、对你有意义并且要在一定的期限内完成。</p>
+<h2 id="第二步：教学">第二步：教学</h2>
+<p>创造一个场景，在这个场景中将自己学到的知识讲授给“别人”。在这个过程中会遇到很多问题，比如说不清楚，讲不明白，自己也模棱两可等，那就说明这些知识点并没有熟练掌握。尝试教授和发现薄弱点就是这一步的重点。</p>
+<p>有朋友可能说，没有人可教授怎么办？其实，这里的教学是统称，具体可因地制宜的创造出许多场景。如果能真实的一对一或一对多的教授那再好不过了。如果没办这样，可以通过写作、录制教学视频、对着手机录音、实践等方式来进行演变。</p>
+<p><img src="https://www.choupangxia.com/wp-content/uploads/2019/09/2.jpg" alt="世界上最好的学习法：费曼学习法插图(2)" title="世界上最好的学习法：费曼学习法插图(2)"></p>
+<p>日常中很常见的一个场景就是，在你学习一个新知识时，你感觉自己已经看懂了，但是去使用、去说、或去写出来的时候发现完全没有思路。这就是知识掌握薄弱的表现。</p>
+<h2 id="第三步：纠错学习">第三步：纠错学习</h2>
+<p>在第二步中遇到了问题，那么就需要进入第三步——纠错学习。无论是在教授的过程中说错的、说不清楚的、模棱两可的都需要在这一步中进行强化。反复查询资料、学习、强化记忆，然后再重复第二步进行验证，直到可以顺利的教授相应的知识。</p>
+<p>第二步和第三步的结合有别于传统的题海战术，题海战术之所以效果不好，是因为大多数人大多数情况下只是在做自己会做的，而忽略了不会的内容，也就是“用低廉的勤奋代替高质量的思考”。</p>
+<h2 id="第四步：简化">第四步：简化</h2>
+<p>这一步是对上面学习的内容进行提炼、简化，去掉非必要的，多余的信息，并且能够用自己的语言通俗易懂的表达出来，而不是照本宣科。</p>
+<p>其实这一步骤还有一个重点，就是简化到可以通过类比，让一个非专业人士（夸张点说就是小孩儿）都能听懂。此时，你就真正掌握了这门学习方法。</p>
+<h2 id="小结">小结</h2>
+<p>有时候我们会觉得自己后知后觉，那是因为学习的太少，了解的太少，很多问题前人已经总结好了现成的方法和方案，我们却不知道，还在自己探索，当然行动缓慢，后知后觉了。只有站在巨人的肩膀上才能看得更远。</p>
 
           
         
@@ -740,7 +419,7 @@
 
   
   <nav class="pagination">
-    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/6/">6</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
+    <a class="extend prev" rel="prev" href="/page/2/"><i class="fa fa-angle-left"></i></a><a class="page-number" href="/">1</a><a class="page-number" href="/page/2/">2</a><span class="page-number current">3</span><a class="page-number" href="/page/4/">4</a><span class="space">&hellip;</span><a class="page-number" href="/page/7/">7</a><a class="extend next" rel="next" href="/page/4/"><i class="fa fa-angle-right"></i></a>
   </nav>
 
 
@@ -788,7 +467,7 @@
               
                 <a href="/archives/">
               
-                  <span class="site-state-item-count">6</span>
+                  <span class="site-state-item-count">7</span>
                   <span class="site-state-item-name">日志</span>
                 </a>
               </div>
@@ -799,7 +478,7 @@
               
               <div class="site-state-item site-state-categories">
                 <a href="/categories/index.html">
-                  <span class="site-state-item-count">5</span>
+                  <span class="site-state-item-count">6</span>
                   <span class="site-state-item-name">分类</span>
                 </a>
               </div>
@@ -810,7 +489,7 @@
               
               <div class="site-state-item site-state-tags">
                 <a href="/tags/index.html">
-                  <span class="site-state-item-count">9</span>
+                  <span class="site-state-item-count">11</span>
                   <span class="site-state-item-name">标签</span>
                 </a>
               </div>
